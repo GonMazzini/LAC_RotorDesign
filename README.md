@@ -1,2 +1,3 @@
 # LAC_RotorDesign
-codes Loads, Aerodynamics and Control
+codes for course Loads, Aerodynamics and Control.
+
