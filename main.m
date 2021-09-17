@@ -1,26 +1,100 @@
-clear all
-close all
-clc
+% LAC Assignment 1
+% Group 0
+% Aerodynamic redesign of DTU 10MW
 
-%% Tip radius
+clear all; close all; clc
 
-R1 = 178.3/2;
-V1 = 11.4;
-I1 = 0.16;
-V1_max = V1*(1+2*I1);
-I2 = 0.14;
+set(0,'defaulttextInterpreter','latex'); 
+set(groot, 'defaultAxesTickLabelInterpreter','latex'); 
+set(groot, 'defaultLegendInterpreter','latex');
+set(0,'defaultAxesFontSize',12);
+set(0, 'DefaultLineLineWidth', 1);
+set(0, 'DefaultFigureRenderer', 'painters');
+set(0,'DefaultFigureWindowStyle','docked')
 
-R2_guess = 90;
+%% Tip radius scaling
+
+R1 = 178.3/2; % original radius
+V1 = 11.4; % original rated speed
+I1 = 0.16; % original turbulence intensity (class IA)
+V1_max = V1*(1+2*I1); % max wind speed wit 2 stdev of TI.
+I2 = 0.14; % target turbulence intensity (class IIIB)
+
+R2_guess = 90; % new radius guess
 
 dif = 1e12;
 it = 0;
 while dif>1e-6
     
-    V2 = (V1^3*R1^2/R2_guess^2)^(1/3);
-    V2_max = V2*(1+2*I2);
+    V2 = (V1^3*R1^2/R2_guess^2)^(1/3); % new rated wind speeed
+    V2_max = V2*(1+2*I2); % new maximum wind speed
 
-    R2 = R1*V1_max/V2_max;
-    dif = abs(R2-R2_guess);
-    R2_guess = R2;
+    R2 = R1*V1_max/V2_max; % corrected radius
+    dif = abs(R2-R2_guess); % residual
+    R2_guess = R2; % update radius
     it = it + 1;
 end
+
+%% Airfoil selection
+
+% loading airfoil data
+path = 'airfoil_data/';
+fileinfo = dir(path);
+filenames = {fileinfo.name};
+filenames = filenames([fileinfo.bytes]>0);
+
+%Airfoil models --> 24%, 30%, 36%, 48%, 60%, cylinder
+polars = true; % set true to see polars
+cl_des = zeros(length(filenames)-2,1); % exclude last 2 airfoils
+
+shift = [0.38, 0.3, 0.42, 0.2]; % shift cl
+for i=1:length(filenames)-2
+    % open data
+    data = readtable(fullfile(path,filenames{i}));
+    data = table2array(data);
+    % restrict range of AoA
+    [~, idx_min] = min(abs(data(:,1)+15));
+    [~, idx_max] = min(abs(data(:,1)-30));
+    data = data(idx_min:idx_max,:);
+    % find cl max in expected range of AoA
+    [~, idx_min] = min(abs(data(:,1)));
+    [~, idx_max] = min(abs(data(:,1)-15));
+    [cl_max, idx] = max(data(idx_min:idx_max,2));
+    % apply shift to find design  cl
+    cl_des(i,1) = cl_max - shift(i);
+    
+    % plotting
+    if polars
+        figure;
+        plot(data(:,1), data(:,2), '-O')
+        hold on
+        plot(data(:,1), ones(length(data(:,1)))*cl_des(i,1), '--r')
+        xlabel('$\alpha$ [deg]')
+        ylabel('$C_l$ [-]')
+        title(filenames{i}(1:end-4));
+        grid on
+        xlim([min(data(:,1)), max(data(:,1))])
+    end
+end
+
+tcratio = [24, 30, 36, 48, 100];
+cl_des(end+1,1) = 0;
+
+% Fitting first 4 points with polynomial
+p1 = polyfit(tcratio(1:end-1), cl_des(1:end-1), 4);
+x1 = linspace(tcratio(1),tcratio(end-1),40);
+y1 = polyval(p1,x1);
+
+% Fitting last 2 points with straight line
+p2 = polyfit(tcratio(end-1:end), cl_des(end-1:end), 1);
+x2 = linspace(tcratio(end-1),tcratio(end),40);
+y2 = polyval(p2,x2);
+
+figure
+scatter(tcratio, cl_des)
+hold on
+plot(x2, y2,'--k')
+plot(x1, y1,'--k')
+grid on
+xlabel('$t/c$ [\%]')
+ylabel('Design $C_l$')
