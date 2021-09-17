@@ -45,7 +45,7 @@ filenames = filenames([fileinfo.bytes]>0);
 
 %Airfoil models --> 24%, 30%, 36%, 48%, 60%, cylinder
 polars = true; % set true to see polars
-cl_des = zeros(length(filenames)-2,1); % exclude last 2 airfoils
+cl_des = zeros(1,length(filenames)-2); % exclude last 2 airfoils
 
 shift = [0.38, 0.3, 0.42, 0.2]; % shift cl
 for i=1:length(filenames)-2
@@ -57,38 +57,47 @@ for i=1:length(filenames)-2
     [~, idx_max] = min(abs(data(:,1)-30));
     data = data(idx_min:idx_max,:);
     % find cl max in expected range of AoA
-    [~, idx_min] = min(abs(data(:,1)));
+    [~, idx_min] = min(abs(data(:,1)+5));
     [~, idx_max] = min(abs(data(:,1)-15));
     [cl_max, idx] = max(data(idx_min:idx_max,2));
     % apply shift to find design  cl
-    cl_des(i,1) = cl_max - shift(i);
+    cl_des(1,i) = cl_max - shift(i);
     
     % plotting
     if polars
         figure;
         plot(data(:,1), data(:,2), '-O')
         hold on
-        plot(data(:,1), ones(length(data(:,1)))*cl_des(i,1), '--r')
+        plot(data(:,1), ones(length(data(:,1)))*cl_des(1,i), '--r')
         xlabel('$\alpha$ [deg]')
         ylabel('$C_l$ [-]')
         title(filenames{i}(1:end-4));
         grid on
         xlim([min(data(:,1)), max(data(:,1))])
+        
+        figure;
+        plot(data(:,3), data(:,2), '-O')
+        hold on
+        plot(data(:,3), ones(length(data(:,3)))*cl_des(1,i), '--r')
+        xlabel('$C_d$ [-]')
+        ylabel('$C_l$ [-]')
+        title(filenames{i}(1:end-4));
+        grid on
     end
 end
 
 tcratio = [24, 30, 36, 48, 100];
-cl_des(end+1,1) = 0;
+cl_des(1,end+1) = 0;
 
 % Fitting first 4 points with polynomial
-p1 = polyfit(tcratio(1:end-1), cl_des(1:end-1), 4);
-x1 = linspace(tcratio(1),tcratio(end-1),40);
-y1 = polyval(p1,x1);
+p1_cl = polyfit(tcratio(1:end-1), cl_des(1:end-1), 4);
+x1 = linspace(tcratio(1), tcratio(end-1), 40);
+y1 = polyval(p1_cl,x1);
 
 % Fitting last 2 points with straight line
-p2 = polyfit(tcratio(end-1:end), cl_des(end-1:end), 1);
-x2 = linspace(tcratio(end-1),tcratio(end),40);
-y2 = polyval(p2,x2);
+p2_cl = polyfit(tcratio(end-1:end), cl_des(end-1:end), 1);
+x2 = linspace(tcratio(end-1), tcratio(end), 40);
+y2 = polyval(p2_cl,x2);
 
 figure
 scatter(tcratio, cl_des)
@@ -98,3 +107,49 @@ plot(x1, y1,'--k')
 grid on
 xlabel('$t/c$ [\%]')
 ylabel('Design $C_l$')
+
+% Read corresponding design alpha and design cd 
+alpha_des = [9.3241, 9.2707, 6.0528, 3.7795, 0];
+cd_des = [0.01372, 0.01697, 0.02137, 0.03397, 0.6];
+clcd_des = cl_des./cd_des;
+
+% Fit curve to alpha design
+% Fitting first 4 points with polynomial
+p1_alpha = polyfit(tcratio(1:end-1), alpha_des(1:end-1), 3);
+x1 = linspace(tcratio(1), tcratio(end-1), 40);
+y1 = polyval(p1_alpha,x1);
+
+% Fitting last 2 points with straight line
+p2_alpha = polyfit(tcratio(end-1:end), alpha_des(end-1:end), 1);
+x2 = linspace(tcratio(end-1), tcratio(end), 40);
+y2 = polyval(p2_alpha,x2);
+
+figure
+scatter(tcratio, alpha_des)
+hold on
+plot(x2, y2,'--k')
+plot(x1, y1,'--k')
+grid on
+xlabel('$t/c$ [\%]')
+ylabel('Design $\alpha$')
+
+% Fitting first 4 points with polynomial
+p1_clcd = polyfit(tcratio(1:end-1), clcd_des(1:end-1), 3);
+x1 = linspace(tcratio(1), tcratio(end-1), 40);
+y1 = polyval(p1_clcd,x1);
+
+% Fitting last 2 points with straight line
+p2_clcd = polyfit(tcratio(end-1:end), clcd_des(end-1:end), 1);
+x2 = linspace(tcratio(end-1), tcratio(end), 40);
+y2 = polyval(p2_clcd,x2);
+
+figure
+scatter(tcratio, clcd_des)
+hold on
+plot(x2, y2,'--k')
+plot(x1, y1,'--k')
+grid on
+xlabel('$t/c$ [\%]')
+ylabel('Design $C_l/C_d$')
+
+%% 
