@@ -90,7 +90,7 @@ tcratio = [24, 30, 36, 48, 100];
 cl_des(1,end+1) = 0;
 
 % Fitting first 4 points with polynomial
-p1_cl = polyfit(tcratio(1:end-1), cl_des(1:end-1), 4);
+p1_cl = polyfit(tcratio(1:end-1), cl_des(1:end-1), 3);
 x1 = linspace(tcratio(1), tcratio(end-1), 40);
 y1 = polyval(p1_cl,x1);
 
@@ -152,4 +152,24 @@ grid on
 xlabel('$t/c$ [\%]')
 ylabel('Design $C_l/C_d$')
 
-%% 
+%% Thickness scaling
+
+data = readtable('DTU_10MW_RWT_ae', 'Filetype', 'text');
+data = table2array(data(:,1:4));
+
+t_dtu = data(:,3).*data(:,2)/100;
+t = t_dtu*R2/R1;
+r = linspace(0, R2 ,40);
+
+p_t = polyfit(r, t, 6);
+y = polyval(p_t, linspace(0, R2, 100));
+
+figure;
+plot(data(:,1), t_dtu, 'x', 'DisplayName', 'DTU 10MW')
+hold on
+plot(r, t, 'x','DisplayName', 'New design')
+plot(linspace(0, R2, 100), y, '--k',  'DisplayName', 'Fit')
+xlabel('r [m]')
+ylabel('t [m]')
+grid on
+legend
