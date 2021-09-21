@@ -173,3 +173,14 @@ xlabel('r [m]')
 ylabel('t [m]')
 grid on
 legend
+
+%% Save polynomials
+curves.polynomials.t = p_t;
+curves.polynomials.cl1 = p1_cl;
+curves.polynomials.cl2 = p2_cl;
+curves.polynomials.clcd1 = p1_clcd;
+curves.polynomials.clcd2 = p2_clcd;
+curves.polynomials.alpha1 = p1_alpha;
+curves.polynomials.alpha2 = p2_alpha;
+
+save('polynomials.mat','-struct','curves')
