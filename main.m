@@ -152,4 +152,35 @@ grid on
 xlabel('$t/c$ [\%]')
 ylabel('Design $C_l/C_d$')
 
-%% 
+%% Thickness scaling
+
+data = readtable('DTU_10MW_RWT_ae', 'Filetype', 'text');
+data = table2array(data(:,1:4));
+
+t_dtu = data(:,3).*data(:,2)/100;
+t = t_dtu*R2/R1;
+r = linspace(0, R2 ,40);
+
+p_t = polyfit(r, t, 6);
+y = polyval(p_t, linspace(0, R2, 100));
+
+figure;
+plot(data(:,1), t_dtu, 'x', 'DisplayName', 'DTU 10MW')
+hold on
+plot(r, t, 'x','DisplayName', 'New design')
+plot(linspace(0, R2, 100), y, '--k',  'DisplayName', 'Fit')
+xlabel('r [m]')
+ylabel('t [m]')
+grid on
+legend
+
+%% Save polynomials
+curves.polynomials.t = p_t;
+curves.polynomials.cl1 = p1_cl;
+curves.polynomials.cl2 = p2_cl;
+curves.polynomials.clcd1 = p1_clcd;
+curves.polynomials.clcd2 = p2_clcd;
+curves.polynomials.alpha1 = p1_alpha;
+curves.polynomials.alpha2 = p2_alpha;
+
+save('polynomials.mat','-struct','curves')
