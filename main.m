@@ -90,7 +90,7 @@ tcratio = [24, 30, 36, 48, 100];
 cl_des(1,end+1) = 0;
 
 % Fitting first 4 points with polynomial
-p1_cl = polyfit(tcratio(1:end-1), cl_des(1:end-1), 4);
+p1_cl = polyfit(tcratio(1:end-1), cl_des(1:end-1), 3);
 x1 = linspace(tcratio(1), tcratio(end-1), 40);
 y1 = polyval(p1_cl,x1);
 

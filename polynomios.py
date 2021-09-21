@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # -*- coding: utf-8 -*-
 """
 Created on Wed Sep 15 16:29:36 2021
@@ -62,5 +62,5 @@ plt.plot(t_c, Cl, "o", new_x, new_y)
 plt.ylabel('Cl')
 plt.xlabel('t_c')
 plt.grid()
->>>>>>> cb9cdc5c50ac52e5cf2e7bd53d7ea5f3954793ca
+
 plt.show()

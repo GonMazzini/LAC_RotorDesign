@@ -1,11 +1,11 @@
 clear all; close all; clc
 
-rotor.R = 35;
+rotor.R = 97.77;
 rotor.tsr = 9.0;
 rotor.B = 3;
 rotor.a = 1/3;
 
-rotor.r_lst = 5:0.5:34.5;
+rotor.r_lst = 5:0.5:0.98*rotor.R ;
 [rotor.t, rotor.c, rotor.phi, rotor.alpha, rotor.beta, rotor.cl, rotor.cd, ...
     rotor.ap, rotor.cp, rotor.ct] = deal(NaN(length(rotor.r_lst),1));
 
