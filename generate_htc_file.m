@@ -1,7 +1,7 @@
 %% Preparation of the htc file
 
 %Inputs
-R1 = 178.3/2; %original radius
+R1 = 178.3/2-2.8; %original radius
 
 sec = linspace(1,27, 27).';
 
@@ -31,7 +31,7 @@ x_pos = [0
 -0.286719		
 -0.255823		
 -0.207891		
--0.089894]*rotor.R/R1;
+-0.089894]*(rotor.R-2.8)/R1;
 
 y_pos = [ 7.006e-05 		
  -0.0122119		
@@ -59,11 +59,12 @@ y_pos = [ 7.006e-05
  -2.92517		
  -3.06577		
  -3.20952		
- -3.33685]*rotor.R/R1; 
+ -3.33685]*(rotor.R-2.8)/R1; 
 
 z_pos = linspace(4.44089e-16, rotor.R - 2.8, 27).';
 
-twist = -linspace(rotor.beta(1), rotor.beta(end), 27).';
+twist = -interp1(rotor.r_lst, rotor.beta, z_pos);
+twist(isnan(twist)) = -25;
 
 last = repmat(';',[27,1]);
 %Table creation
