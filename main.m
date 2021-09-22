@@ -49,6 +49,7 @@ polars = true; % set true to see polars
 cl_des = zeros(1,length(filenames)-2); % exclude last 2 airfoils
 
 shift = [0.38, 0.3, 0.42, 0.2]; % shift cl
+
 for i=1:length(filenames)-2
     % open data
     data = readtable(fullfile(path,filenames{i}));
@@ -64,22 +65,37 @@ for i=1:length(filenames)-2
     % apply shift to find design  cl
     cl_des(1,i) = cl_max - shift(i);
     
+    % Find interval
+%     Cl_curve = data(idx_min:idx_max,2);
+%     alpha_curve = data(idx_min:idx_max,1);
+%     Cd_curve = data(idx_min:idx_max,3);   
+    Cl_curve = data(idx_min:(idx_min+idx-1),2);
+    alpha_curve = data(idx_min:(idx_min+idx-1),1);
+    Cd_curve = data(idx_min:(idx_min+idx-1),3);  
+    
+    alpha_des(i) = interp1(Cl_curve,alpha_curve,cl_des(1,i)); 
+    cd_des(i) = interp1(Cl_curve,Cd_curve,cl_des(1,i));
+    
     % plotting
     if polars
         figure;
-        plot(data(:,1), data(:,2), '-O')
-        hold on
-        plot(data(:,1), ones(length(data(:,1)))*cl_des(1,i), '--r')
+        subplot(1,2,2)
+        plot(data(:,1), data(:,2), '-O');hold on; 
+        yline(cl_des(1,i), '--r'); hold on;
+        xline(alpha_des(i),'--r'); hold on;
+        scatter(alpha_des(i),cl_des(i),'xr','linewidth',1)
         xlabel('$\alpha$ [deg]')
         ylabel('$C_l$ [-]')
         title(filenames{i}(1:end-4));
         grid on
         xlim([min(data(:,1)), max(data(:,1))])
         
-        figure;
-        plot(data(:,3), data(:,2), '-O')
-        hold on
-        plot(data(:,3), ones(length(data(:,3)))*cl_des(1,i), '--r')
+%         figure;
+        subplot(1,2,1)
+        plot(data(:,3), data(:,2), '-O');hold on;
+        yline(cl_des(1,i), '--r');hold on;
+        xline(cd_des(i),'--r');hold on;
+        scatter(cd_des(i),cl_des(i),'xr','linewidth',1)
         xlabel('$C_d$ [-]')
         ylabel('$C_l$ [-]')
         title(filenames{i}(1:end-4));
@@ -110,8 +126,11 @@ xlabel('$t/c$ [\%]')
 ylabel('Design $C_l$')
 
 % Read corresponding design alpha and design cd 
-alpha_des = [9.3241, 9.2707 , 6.0528, 3.7795, 0];  %
-cd_des = [0.01372, 0.01697, 0.02137, 0.03397, 0.6];
+% Alpha design:
+alpha_des(end+1)=0;
+cd_des(end+1)=0.6;
+% alpha_des = [9.3241, 9.2707, 6.0528, 3.7795, 0];
+% cd_des = [0.01372, 0.01697, 0.02137, 0.03397, 0.6];
 clcd_des = cl_des./cd_des;
 
 % Fit curve to alpha design
