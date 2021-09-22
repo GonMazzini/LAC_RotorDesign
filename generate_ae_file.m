@@ -17,8 +17,6 @@ disp(size(rigid))
 
 % T.Properties.VariableNames = {'a',    'b',    'c',    'd'};
 T = table(radial, chord, t_c, rigid);
-
-
 T.semicolon = strrep(num2cell( num2str(ones(size(RforDAT))) ), '1', ';');
 
 writetable(T,'DTU_10MW_RWT_redesign_ae.dat','Delimiter','\t');

@@ -8,37 +8,39 @@ set(groot, 'defaultLegendInterpreter','latex');
 set(0,'defaultAxesFontSize',12);
 set(0, 'DefaultLineLineWidth', 1);
 set(0, 'DefaultFigureRenderer', 'painters');
-set(0,'DefaultFigureWindowStyle','docked')
+set(0,'DefaultFigureWindowStyle','normal')
 
 %% Part 1
 
-data = readtable('Part1/DTU_10MW_rigid_hawc2s_u8000.ind','Filetype', 'text');
-data = table2array(data);
+% data = readtable('Part1/DTU_10MW_rigid_hawc2s_u8000.ind','Filetype', 'text');
+% data = table2array(data);
 
-name = {'a [-]', 'a''[-]', '$C_l$ [-]', '$C_d$ [-]', '$C_P$ [-]', '$C_T$ [-]', '$\phi [deg]$'};
-pos = [2, 3, 17, 18, 34, 33, 5];
-r = data(:,1);
-for i=1:length(pos)
-    figure;
-    if pos(i)==5
-        plot(r, rad2deg(data(:,pos(i))));
-    else
-    plot(r, data(:,pos(i)));
-    end
-    grid on
-    xlabel('r [m]');
-    ylabel(name(i));
-end
+% name = {'a [-]', 'a''[-]', '$C_l$ [-]', '$C_d$ [-]', '$C_P$ [-]', '$C_T$ [-]', '$\phi [deg]$'};
+% pos = [2, 3, 17, 18, 34, 33, 5];
+% r = data(:,1);
+% for i=1:length(pos)
+%     figure;
+%     if pos(i)==5
+%         plot(r, rad2deg(data(:,pos(i))));
+%     else
+%     plot(r, data(:,pos(i)));
+%     end
+%     grid on
+%     xlabel('r [m]');
+%     ylabel(name(i));
+% end
 
 %% Part 2a
 
 TSR = 6:0.5:9;
-R = 0.8893420444E+02;
+R = 99.77;
 U_inf = 8;
 omega = TSR*U_inf/R*30/pi;
-TSR = omega/30*pi*97.77/U_inf;
 
-data = readtable('HAWC_results/DTU_10MW_redesign_rigid_hawc2s.pwr', 'Filetype', 'text');
+
+% use this for the original values:  'HAWC_results/DTU_10MW_rigid_hawc2s.pwr'
+
+data = readtable('HAWC_results/DTU_10MW_rigid_hawc2s.pwr', 'Filetype', 'text');
 data = table2array(data);
 
 P = data(:,2);
@@ -71,7 +73,9 @@ pos = [2, 3, 17, 18, 34, 33];
 for i=1:length(pos)
     figure;
     for j=0:6
-    filename = sprintf('HAWC_results/DTU_10MW_redesign_rigid_hawc2s_u800%d.ind',j);
+        
+    % use this for the original values: 'HAWC_results/DTU_10MW_rigid_hawc2s_u800%d.ind'
+    filename = sprintf('HAWC_results/DTU_10MW_rigid_hawc2s_u800%d.ind',j);
     data = readtable(filename,'Filetype', 'text');
     data = table2array(data);
     plot(data(:,1), data(:,pos(i)), 'DisplayName', num2str(TSR(j+1)));
@@ -83,9 +87,19 @@ for i=1:length(pos)
     leg = legend;
     title(leg,'TSR')
 end
+%% for design TSR (8.0 RPM)
+pos = 17;
+j = 4;
+filename = sprintf('HAWC_results/DTU_10MW_rigid_hawc2s_u800%d.ind',j);
+data = readtable(filename,'Filetype', 'text');
+data = table2array(data);
+plot(data(:,1), data(:,pos), 'DisplayName', num2str(TSR(j+1)));
+%load('rotor.mat')
+% Side-by-side plots of the actual lift coefficient and the design lift coefficient versus relative thickness (left 
+% plot) and versus radius (right plot) for design pitch and TSR
+
 
 %% Part 3
-
 data = readtable('Part1/data/DTU_10MW_RWT_ae', 'Filetype', 'text');
 data = table2array(data(:,1:4));
 

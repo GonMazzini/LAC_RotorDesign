@@ -306,7 +306,7 @@
       second_order_actuator	pitch1 100 0.7;
     end rotating_threebladed_substructure;
     ; Operational data
-    operational_data_filename	./data/operation_rigid_1pt.dat;  file with operational data points
+    operational_data_filename	./data/operation_rigid_7pt.dat;  file with operational data points
     ; HAWC2S commands (uncomment as needed);
     compute_steady_states	nobladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for other commands)
     save_power;	save steady-state values to .pwr
