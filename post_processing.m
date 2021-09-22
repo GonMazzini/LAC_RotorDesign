@@ -36,8 +36,9 @@ TSR = 6:0.5:9;
 R = 0.8893420444E+02;
 U_inf = 8;
 omega = TSR*U_inf/R*30/pi;
+TSR = omega/30*pi*97.77/U_inf;
 
-data = readtable('Part2/DTU_10MW_rigid_hawc2s.pwr', 'Filetype', 'text');
+data = readtable('HAWC_results/DTU_10MW_redesign_rigid_hawc2s.pwr', 'Filetype', 'text');
 data = table2array(data);
 
 P = data(:,2);
@@ -70,7 +71,7 @@ pos = [2, 3, 17, 18, 34, 33];
 for i=1:length(pos)
     figure;
     for j=0:6
-    filename = sprintf('Part2/DTU_10MW_rigid_hawc2s_u800%d.ind',j);
+    filename = sprintf('HAWC_results/DTU_10MW_redesign_rigid_hawc2s_u800%d.ind',j);
     data = readtable(filename,'Filetype', 'text');
     data = table2array(data);
     plot(data(:,1), data(:,pos(i)), 'DisplayName', num2str(TSR(j+1)));
