@@ -13,7 +13,7 @@ rotor.tsr = 8.0;
 rotor.B = 3;
 rotor.a = 1/3;
 
-rotor.r_lst = 5:0.5:rotor.R*0.98;
+rotor.r_lst = 5:0.5:rotor.R*0.95;
 [rotor.t, rotor.c, rotor.phi, rotor.alpha, rotor.beta, rotor.cl, rotor.cd, ...
     rotor.ap, rotor.cp, rotor.ct] = deal(NaN(length(rotor.r_lst), 1));
 
@@ -22,10 +22,11 @@ x0 = [8, 0.0001]; % initial guesses
 lb = [0, 0]; % lower bounds
 ub = [inf, 1]; % upper bounds
 
+
 for i = 1:length(rotor.r_lst)
-    res = lsqnonlin(@(x)residuals(x, rotor,polynomials, i, 0), x0, lb, ub);
+    res = lsqnonlin(@(x)residuals(x, rotor,polynomials, i, 0, olddesign), x0, lb, ub);
     x0 = [res(1), res(2)];
-    rotor = residuals(x0, rotor,polynomials, i, 1);
+    rotor = residuals(x0, rotor,polynomials, i, 1, olddesign);
 end
  
 rotor.c(1:5)
@@ -33,14 +34,6 @@ rotor.c(1:5)
 rotor.CP = trapz(rotor.r_lst, rotor.cp.*rotor.r_lst')*2/rotor.R^2;
 rotor.CT = trapz(rotor.r_lst, rotor.ct.*rotor.r_lst')*2/rotor.R^2;
 %%
-% x = linspace(0,100,100);
-% y = zeros(length(x),1);
-% for i=1:length(x)
-%     y(i,1) = cl_des(x(i));
-% end
-% figure
-% plot(x,y)
-% grid on
 
 figure
 plot(rotor.r_lst, rotor.c)
@@ -55,6 +48,24 @@ title('Power Coefficient along blade length')
 xlabel('r [m]')
 ylabel('$C_p$')
 grid on
+
+for i=1:length(rotor.beta)
+    if rotor.beta(i)>25
+        rotor.beta(i) = 25;
+    end
+    
+    if rotor.r_lst(i)<33
+        rotor.c(i) = spline(olddesign.r(1:5), olddesign.c(1:5), rotor.r_lst(i))*rotor.R/olddesign.r(end)*0.94;
+    end
+      
+end
+rotor.c(1) = olddesign.c(1);
+
+rotor.r_lst(end+1) = rotor.R;
+rotor.beta(end+1) = rotor.beta(end);
+rotor.t(end+1) = rotor.t(end)*0.55;
+rotor.c(end+1) = rotor.c(end)*0.55;
+
 
 %% Comparison of designs
 
@@ -91,15 +102,19 @@ xlabel('r [m]');ylabel('t [m]')
 legend('Redesigned','Old')
 grid on; box on;
 
+
 %% F U N C T I O N S
 
-function output = residuals(x, struct,struct2, idx, mode)
+function output = residuals(x, struct, struct2, idx, mode, olddesign)
+    r = struct.r_lst(idx);
 
     c = x(1);
     ap = x(2);
-    r = struct.r_lst(idx);
-
+    
     t = thickness(r,struct2);
+    if t>max(olddesign.t)
+        t = max(olddesign.t);
+    end
     tcratio = t/c*100;
     clcd = clcd_des(tcratio,struct2);
     cl = cl_des(tcratio,struct2);
@@ -114,6 +129,7 @@ function output = residuals(x, struct,struct2, idx, mode)
     sigma = struct.B*c/(2*pi*r);
     
     % residuals
+    
     res_c = 4*pi*r*sin(phi)^2*F*2*struct.a/(cy*struct.B*(1-struct.a)) - c;
     res_ap = 1/(4*F*sin(phi)*cos(phi)/sigma/cx-1) - ap;
     res = [res_c, res_ap];
