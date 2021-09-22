@@ -21,7 +21,7 @@ for i = 1:length(rotor.r_lst)
 end
  
 rotor.c(1:5)
-
+% output = residuals([3.0,0.001], rotor, 1, 1)
 
 %% F U N C T I O N S
 

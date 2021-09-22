@@ -1,7 +1,9 @@
 % LAC Assignment 1
 % Group 0
 % Aerodynamic redesign of DTU 10MW
-
+%% Content of this script:  
+% - tip radius scaling (line 16 until 37)
+% - read airfoil data and plot polars (line 39 until 88)
 clear all; close all; clc
 
 set(0,'defaulttextInterpreter','latex'); 
@@ -10,8 +12,7 @@ set(groot, 'defaultLegendInterpreter','latex');
 set(0,'defaultAxesFontSize',12);
 set(0, 'DefaultLineLineWidth', 1);
 set(0, 'DefaultFigureRenderer', 'painters');
-set(0,'DefaultFigureWindowStyle','docked')
-
+set(0,'DefaultFigureWindowStyle','normal') % docked
 %% Tip radius scaling
 
 R1 = 178.3/2; % original radius

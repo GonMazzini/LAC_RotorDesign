@@ -18,7 +18,7 @@ rotor.r_lst = 5:0.5:rotor.R*0.95;
     rotor.ap, rotor.cp, rotor.ct] = deal(NaN(length(rotor.r_lst), 1));
 
 
-x0 = [8, 0.0001]; % initial guesses
+x0 = [6.1, 0.0001]; % initial guesses
 lb = [0, 0]; % lower bounds
 ub = [inf, 1]; % upper bounds
 
