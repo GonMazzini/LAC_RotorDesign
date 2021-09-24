@@ -10,35 +10,30 @@ set(0, 'DefaultLineLineWidth', 1);
 set(0, 'DefaultFigureRenderer', 'painters');
 set(0,'DefaultFigureWindowStyle','docked')
 
-%% Part 1
 
-data = readtable('Part1/DTU_10MW_rigid_hawc2s_u8000.ind','Filetype', 'text');
-data = table2array(data);
-
-name = {'a [-]', 'a''[-]', '$C_l$ [-]', '$C_d$ [-]', '$C_P$ [-]', '$C_T$ [-]', '$\phi [deg]$'};
-pos = [2, 3, 17, 18, 34, 33, 5];
-r = data(:,1);
-for i=1:length(pos)
-    figure;
-    if pos(i)==5
-        plot(r, rad2deg(data(:,pos(i))));
-    else
-    plot(r, data(:,pos(i)));
-    end
-    grid on
-    xlabel('r [m]');
-    ylabel(name(i));
-end
-
-%% Part 2a
+%% 
 
 TSR = 6:0.5:9;
-R = 0.8893420444E+02;
+R = 97.77;
 U_inf = 8;
 omega = TSR*U_inf/R*30/pi;
-TSR = omega/30*pi*97.77/U_inf;
 
-data = readtable('HAWC_results/DTU_10MW_redesign_rigid_hawc2s.pwr', 'Filetype', 'text');
+fileinfo = dir('HAWC_results');
+filenames = {fileinfo.name};
+filenames = filenames([fileinfo.bytes]>0);
+
+for i=1:length(filenames)
+    if strcmp(filenames{i}(end-2:end), 'pwr')
+        prefix = filenames{i}(1:end-4);
+        break
+    end
+end
+
+prefix = append('HAWC_results/', prefix);
+
+%% P, T, CP, CT vs TSR
+
+data = readtable(append(prefix,'.pwr'), 'Filetype', 'text');
 data = table2array(data);
 
 P = data(:,2);
@@ -66,15 +61,81 @@ ylabel('$C_T$ [-]')
 xlabel('TSR [-]')
 grid on
 
-name = {'a [-]', 'a''[-]', '$C_l$ [-]', '$C_d$ [-]', '$C_P$ [-]', '$C_T$ [-]'};
-pos = [2, 3, 17, 18, 34, 33];
+%% Cl, alpha Cl/Cd vs t/c (design and actual)
+
+load('polynomials.mat');
+
+name = {'$\alpha$ [deg]' '$C_l$ [-]', '$C_l/C_d$ [-]'};
+pos = [5, 17, 18];
+desired_TSR = 8.0; %Choose desired TSR value
+
+tcratio = 14:100;
+[alpha, cl, clcd] = deal(zeros(length(tcratio), 1));
+for i=1:length(tcratio)
+    alpha(i,1) = alpha_des(tcratio(i), polynomials);
+    cl(i,1) = cl_des(tcratio(i), polynomials);
+    clcd(i,1) = clcd_des(tcratio(i), polynomials);
+end
+
+
 for i=1:length(pos)
     figure;
-    for j=0:6
-    filename = sprintf('HAWC_results/DTU_10MW_redesign_rigid_hawc2s_u800%d.ind',j);
+    idx = find(TSR == desired_TSR);
+    filename = sprintf(append(prefix,'_u800%d.ind'), idx-1);
     data = readtable(filename,'Filetype', 'text');
     data = table2array(data);
-    plot(data(:,1), data(:,pos(i)), 'DisplayName', num2str(TSR(j+1)));
+    t = zeros(length(data(:,1)),1);
+    for k=1:length(data(:,1))
+        t(k,1) = thickness(data(k,1), polynomials);
+        if t(k,1)>5.38
+            t(k,1) = 5.38;
+        end
+    end
+    tc = t./data(:,32)*100;
+    if pos(i) == 5
+        plot(tc, rad2deg(data(:,pos(i))), 'DisplayName', 'actual');
+        hold on
+        plot(tcratio, alpha, 'DisplayName', 'design');
+    elseif pos(i) == 18
+        plot(tc, data(:,pos(i)-1)./data(:,pos(i)), 'DisplayName', 'actual');
+        hold on
+        plot(tcratio, clcd, 'DisplayName', 'design');
+    else
+        plot(tc, data(:,pos(i)), 'DisplayName', 'actual');
+        hold on
+        plot(tcratio, cl, 'DisplayName', 'design');
+    end
+    
+
+    grid on
+    xlabel('t/c [\%]');
+    ylabel(name(i));
+    legend;
+    xlim([min(tcratio), max(tcratio) ])
+end
+
+
+
+%% a, a', alpha, Cl, Cl/Cd, CP, CT  vs r for different TSRs
+
+name = {'a [-]', 'a''[-]', '$\alpha$ [deg]' '$C_l$ [-]', '$C_l/C_d$ [-]', '$C_P$ [-]', '$C_T$ [-]'};
+pos = [2, 3, 5, 17, 18, 34, 33];
+TSRs = [6.5]; %Choose desired TSR values (set equal to TSR for all)
+for i=1:length(pos)
+    figure;
+    for j=1:length(TSRs)
+    idx = find(TSR == TSRs(j));
+    filename = sprintf(append(prefix,'_u800%d.ind'),idx-1);
+    data = readtable(filename,'Filetype', 'text');
+    data = table2array(data);
+    if pos(i) == 5
+        plot(data(:,1), rad2deg(data(:,pos(i))), 'DisplayName', num2str(TSRs(j)));
+    elseif pos(i) == 18
+        plot(data(:,1), data(:,pos(i)-1)./data(:,pos(i)), 'DisplayName', num2str(TSRs(j)));
+    else
+        plot(data(:,1), data(:,pos(i)), 'DisplayName', num2str(TSRs(j)));
+    end
+    
     hold on
     end
     grid on
@@ -82,66 +143,86 @@ for i=1:length(pos)
     ylabel(name(i));
     leg = legend;
     title(leg,'TSR')
+    
 end
 
-%% Part 3
+%% P, T, CP, CT vs V
 
-data = readtable('Part1/data/DTU_10MW_RWT_ae', 'Filetype', 'text');
-data = table2array(data(:,1:4));
 
-figure;
-subplot(2,2,1);
-plot(data(:,1),data(:,2));
-xlabel('r [m]');
-ylabel('c [m]');
-xlim([0,max(data(:,1))]);
-grid on;
 
-subplot(2,2,3);
-plot(data(:,1),data(:,3));
-xlabel('r [m]');
-ylabel('t/c [\%]');
-xlim([0,max(data(:,1))]);
-grid on;
+%% Functions
 
-data2 = readtable('Part1/DTU_10MW_rigid_hawc2s_u8000.ind','Filetype', 'text');
-data2 = table2array(data2);
-
-subplot(2,2,2);
-plot(data2(:,1),-rad2deg(data2(:,13)));
-xlabel('r [m]');
-ylabel('$\beta$ [deg]');
-xlim([0,max(data2(:,1))]);
-grid on;
-
-subplot(2,2,4);
-plot(data(:,1),data(:,3)/100.*data(:,2));
-xlabel('r [m]');
-ylabel('t [m]');
-xlim([0,max(data(:,1))]);
-grid on;
-
-saveas(gcf,'image.svg')
-
-%% Bonus
-
-data1 = readtable('Part1/DTU_10MW_rigid_hawc2s_u8000.ind','Filetype', 'text');
-data1 = table2array(data1);
-
-data2 = readtable('Bonus/DTU_10MW_rigid_hawc2s_u8000.ind','Filetype', 'text');
-data2 = table2array(data2);
-
-name = {'a [-]', 'a''[-]', '$C_l$ [-]', '$C_d$ [-]', '$C_P$ [-]', '$C_T$ [-]'};
-pos = [2, 3, 17, 18, 34, 33];
-r = data1(:,1);
-for i=1:length(pos)
-    figure;
-    plot(r, data1(:,pos(i)), 'DisplayName', 'No blade deflection');
-    hold on
-    plot(r, data2(:,pos(i)), 'DisplayName', 'Blade deflection');
-    grid on
-    xlabel('r [m]');
-    ylabel(name(i));
-    legend;
+function t = thickness(r,polynomials)
+    %Absolute thickness [m] as a function of radius [m] for 35-m blade
+    if r<=5
+        r = 5;
+    end
+    p = polynomials.t;
+    t = polyval(p,r);
 end
 
+
+function alpha = alpha_des(tcratio,polynomials)
+    %Design AOA [deg] as a function of t/c [%]
+
+    if tcratio<24
+        tcratio = 24;
+    elseif tcratio>100
+        tcratio = 100;
+    else
+    end
+
+    if tcratio < 48
+        p = polynomials.alpha1;
+        alpha = polyval(p,tcratio);        
+    elseif 36 <= tcratio
+        p = polynomials.alpha2;
+        alpha = polyval(p,tcratio);
+    else
+        print('Invalid t/c input')
+    end
+end
+
+
+function cl = cl_des(tcratio,polynomials)
+    %Design cl [-] as a function of t/c [%]
+
+    if tcratio<24
+        tcratio = 24;
+    elseif tcratio>100
+        tcratio = 100;
+    else
+    end
+
+    if tcratio < 48
+        p = polynomials.cl1;
+        cl = polyval(p,tcratio);
+    elseif 48 <= tcratio
+        p = polynomials.cl2;
+        cl = polyval(p,tcratio);
+    else
+        print('Invalid t/c range')
+    end
+
+end
+
+function clcd = clcd_des(tcratio,polynomials)
+    %Design cl/cd [-] as a function of t/c [%]
+
+    if tcratio<24
+        tcratio = 24;
+    elseif tcratio>100
+        tcratio = 100;
+    else
+    end
+    
+    if tcratio < 48
+        p = polynomials.clcd1;
+        clcd = polyval(p,tcratio);
+    elseif 48 <= tcratio
+        p = polynomials.clcd2;
+        clcd = polyval(p,tcratio);         
+    else
+        print('Invalid t/c range')
+    end
+end
