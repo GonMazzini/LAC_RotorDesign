@@ -9,7 +9,7 @@ olddesign.tc = bladedat(:,4);clear bladedat
 olddesign.t = olddesign.tc.*olddesign.c/100;
 
 rotor.R = 97.7;
-rotor.tsr = 8.0;
+rotor.tsr = 6.75;
 rotor.B = 3;
 rotor.a = 1/3;
 
@@ -54,12 +54,26 @@ for i=1:length(rotor.beta)
         rotor.beta(i) = 25;
     end
     
-    if rotor.r_lst(i)<33
-        rotor.c(i) = spline(olddesign.r(1:5), olddesign.c(1:5), rotor.r_lst(i))*rotor.R/olddesign.r(end)*0.94;
+    a = olddesign.r(1:6);
+    b = olddesign.c(1:6);
+    b(5) = b(5)*1.02;
+    b(6) = b(6)*1.03;
+
+    if rotor.r_lst(i)<43 && rotor.r_lst(i)>9.2
+    rotor.c(i,1) = spline(a, b , rotor.r_lst(i))*rotor.R/olddesign.r(end);
+    elseif rotor.r_lst(i)<10
+        rotor.c(i,1) = interp1([rotor.r_lst(1), 10],...
+                              [olddesign.c(1), spline(a, b , 10)*rotor.R/olddesign.r(end)], rotor.r_lst(i));
+    end 
+
+     if rotor.c(i)>rotor.R/olddesign.r(end)*max(olddesign.c)
+        rotor.c(i) = rotor.R/olddesign.r(end)*max(olddesign.c);
     end
+       
+    
       
 end
-rotor.c(1) = olddesign.c(1);
+
 
 rotor.r_lst(end+1) = rotor.R;
 rotor.beta(end+1) = rotor.beta(end);
