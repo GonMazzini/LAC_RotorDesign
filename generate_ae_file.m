@@ -10,6 +10,13 @@ t_c =  100 * TforDAT ./ CforDAT;
 rigid = ones(size(RforDAT'))'; % just a column of ones
 
 chord = CforDAT;
+
+
+radial = [1; 1; radial];
+chord = [cell(1,1); num2cell(length(t_c)); num2cell(chord)];
+t_c = [cell(1,1); cell(1,1); num2cell(t_c)];
+rigid = [cell(1,1); cell(1,1); num2cell(rigid)];
+
 disp(size(radial))
 disp(size(chord))
 disp(size(t_c))
@@ -19,12 +26,12 @@ disp(size(rigid))
 T = table(radial, chord, t_c, rigid);
 
 
-T.semicolon = strrep(num2cell( num2str(ones(size(RforDAT))) ), '1', ';');
+%T.semicolon = strrep(num2cell( num2str(ones(size(RforDAT))) ), '1', ';');
 
-writetable(T,'DTU_10MW_RWT_redesign_ae.dat','Delimiter','\t');
-type DTU_10MW_RWT_redesign_ae.dat
+writetable(T,'HAWC_inputs\DTU_10MW_RWT_redesign_ae.dat','Delimiter','\t', 'WriteVariableNames', false);
+type HAWC_inputs\DTU_10MW_RWT_redesign_ae.dat
 
-warning('Remember to add the number of lines in the _ae file');
+%warning('Remember to add the number of lines in the _ae file');
 %fid = fopen('tabledata.txt','wt');
 
 %fgetl(fid)
