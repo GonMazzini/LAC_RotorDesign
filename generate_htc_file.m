@@ -3,7 +3,10 @@
 %Inputs
 R1 = 178.3/2-2.8; %original radius
 
-sec = linspace(1,27, 27).';
+sec = {};
+for i=1:27
+    sec{i,1} = append('sec ', num2str(i));
+end
 
 x_pos = [0 				
 -2.06477e-05	
@@ -70,4 +73,4 @@ last = repmat(';',[27,1]);
 %Table creation
 T = table(sec, x_pos, y_pos, z_pos, twist, last);
 
-writetable(T,'DTU_10MW_redesign_rigid_hawc2s.txt', 'Delimiter', ' ' );
+writetable(T,'HAWC_inputs/DTU_10MW_redesign_rigid_hawc2s.txt', 'Delimiter', ' ', 'QuoteStrings', false );
