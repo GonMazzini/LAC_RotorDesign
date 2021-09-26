@@ -89,7 +89,7 @@ plot(rotor.r_lst, rotor.c);hold on;
 plot(olddesign.r,olddesign.c)
 title('Chord distribution')
 xlabel('r [m]');ylabel('c [m]')
-legend('Redesigned','Old')
+legend('Redesigned','DTU 10 MW RWT')
 grid on; box on;
 
 subplot(2,2,2)
@@ -97,7 +97,7 @@ plot(rotor.r_lst, rotor.beta);hold on;
 plot(olddesign.r,olddesign.beta)
 title('Twist distribution')
 xlabel('r [m]');ylabel('$\beta [deg]$')
-legend('Redesigned','Old')
+legend('Redesigned','DTU 10 MW RWT')
 grid on; box on;
 
 subplot(2,2,3)
@@ -105,7 +105,7 @@ plot(rotor.r_lst, 100*rotor.t./rotor.c);hold on;
 plot(olddesign.r,olddesign.tc)
 title('Relative thickness distribution')
 xlabel('r [m]');ylabel('$t/c [\%]$')
-legend('Redesigned','Old')
+legend('Redesigned','DTU 10 MW RWT')
 grid on; box on;
 
 subplot(2,2,4)
@@ -113,7 +113,7 @@ plot(rotor.r_lst, rotor.t);hold on;
 plot(olddesign.r,olddesign.t)
 title('Absolute thickness distribution')
 xlabel('r [m]');ylabel('t [m]')
-legend('Redesigned','Old')
+legend('Redesigned','DTU 10 MW RWT')
 grid on; box on;
 
 
@@ -130,6 +130,11 @@ function output = residuals(x, struct, struct2, idx, mode, olddesign)
         t = max(olddesign.t);
     end
     tcratio = t/c*100;
+    if tcratio < 24.1
+        tcratio = 24.1;
+        %c = t/(tcratio/100); 
+        t = c* (tcratio/100);
+    end
     clcd = clcd_des(tcratio,struct2);
     cl = cl_des(tcratio,struct2);
     

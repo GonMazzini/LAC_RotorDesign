@@ -88,17 +88,15 @@ for i=1:length(pos)
     filename = sprintf(append(prefix,'_u800%d.ind'), idx-1);
     data = readtable(filename,'Filetype', 'text');
     data = table2array(data);
-    tc = zeros(length(data(:,1)),1);
+    t = zeros(length(data(:,1)),1);
     for k=1:length(data(:,1))
-        t = thickness(data(k,1), polynomials);
-        if t>5.38
-            t = 5.38;
-        end
-        tc(k,1) = t/data(k,32)*100;
-        if tc(k,1) < 24.1
-            tc(k,1) = 24.1;
+        t(k,1) = thickness(data(k,1), polynomials);
+        if t(k,1)>5.38
+            t(k,1) = 5.38;
+        
         end
     end
+    tc = t./data(:,32)*100;
     if pos(i) == 5
         plot(tc, rad2deg(data(:,pos(i))), 'DisplayName', 'actual');
         hold on
