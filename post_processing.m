@@ -181,6 +181,34 @@ for i=1:length(pos)
 end
 
 %% P, T, CP, CT vs V
+data =  readtable('HAWC_inputs/DTU_10MW_rigid_MWS_hawc2s.pwr','Filetype', 'text' );
+data = table2array(data);
+
+v =  data(:,1);
+P = data(:,2);
+CP = data(:,4);
+T = data(:,3);
+CT = data(:,5);
+
+subplot(2,1,1);
+yyaxis left
+plot(v,P);
+ylabel('P [kW]')
+yyaxis right
+plot(v,CP);
+ylabel('$C_P$ [-]')
+xlabel('$U_{\infty}$ [m/s]')
+grid on
+
+subplot(2,1,2);
+yyaxis left
+plot(v,T);
+ylabel('T [kN]')
+yyaxis right
+plot(v,CT);
+ylabel('$C_T$ [-]')
+xlabel('$U_{\infty}$ [m/s]')
+grid on
 
 
 
