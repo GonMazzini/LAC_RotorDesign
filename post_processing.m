@@ -62,7 +62,7 @@ grid on
 
 %% Cl, alpha Cl/Cd vs t/c (design and actual)
 
-load('polynomials.mat');
+load('Aerodynamics\polynomials.mat');
 
 name = {'$\alpha$ [deg]' '$C_l$ [-]', '$C_l/C_d$ [-]'};
 pos = [5, 17, 18];

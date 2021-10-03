@@ -72,5 +72,5 @@ twist(isnan(twist)) = -25;
 last = repmat(';',[27,1]);
 %Table creation
 T = table(sec, x_pos, y_pos, z_pos, twist, last);
-
-writetable(T,'HAWC_inputs/DTU_10MW_redesign_rigid_hawc2s.txt', 'Delimiter', ' ', 'QuoteStrings', false );
+[dir,~,~]=fileparts(pwd);
+writetable(T,append(dir,'\HAWC_inputs/DTU_10MW_redesign_rigid_hawc2s.txt'), 'Delimiter', ' ', 'QuoteStrings', false );

@@ -1,7 +1,8 @@
 clear all; close all; clc
 
 load('polynomials.mat');
-load('blade_original\bladedat.txt');
+[dir,~,~]=fileparts(pwd);
+load(append(dir, '\blade_original\bladedat.txt'));
 olddesign.r = bladedat(:,1);
 olddesign.beta = bladedat(:,2);
 olddesign.c = bladedat(:,3);
