@@ -7,9 +7,17 @@ Created on Tue Sep 29 11:12:32 2020
 """
 # ============================================================================
 import numpy as np
-#
+import os
+from pathlib import Path
+
+
+cwd = os.getcwd()
+cwd = cwd.replace('\\','/')
+path = Path(cwd).parent
+
 # Output file name
-f_new_st = 'st_new.dat'
+f_new_st = Path(str(path) + '\HAWC_inputs\data\DTU_10MW_RWT_Blade_redesign_st.dat')
+
 # ============================================================================
 # INPUTS
 # ============================================================================
