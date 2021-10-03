@@ -49,7 +49,7 @@ polars = true; % set true to see polars
 cl_des = zeros(1,length(filenames)-2); % exclude last 2 airfoils
 cd_des = zeros(1,length(filenames)-2); 
 alpha_des =  zeros(1,length(filenames)-2); 
-shift = [0.38, 0.3, 0.42, 0.2]; % shift cl
+shift = [0.38, 0.32, 0.47, 0.2]; % shift cl
 
 for i=1:length(filenames)-2
     % open data

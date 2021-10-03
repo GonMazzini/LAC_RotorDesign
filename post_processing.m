@@ -8,31 +8,26 @@ set(groot, 'defaultLegendInterpreter','latex');
 set(0,'defaultAxesFontSize',12);
 set(0, 'DefaultLineLineWidth', 1);
 set(0, 'DefaultFigureRenderer', 'painters');
-set(0,'DefaultFigureWindowStyle','normal')
+set(0,'DefaultFigureWindowStyle','docked')
 
 
 %% 
 
 TSR = 6:0.25:9;
+% 
+% fileinfo = dir('HAWC_inputs');
+% filenames = {fileinfo.name};
+% filenames = filenames([fileinfo.bytes]>0);
+% 
+% prefix = zeros(10,1);
+% for i=1:length(filenames)
+%     if strcmp(filenames{i}(end-2:end), 'pwr')
+%         prefix(i,1) = filenames{i}(1:end-4);
+%     end
+% end
 
-
-
-fileinfo = dir('HAWC_inputs');
-filenames = {fileinfo.name};
-filenames = filenames([fileinfo.bytes]>0);
-
-for i=1:length(filenames)
-    if strcmp(filenames{i}(end-2:end), 'pwr')
-        prefix = filenames{i}(1:end-4);
-        break
-    end
-end
-
-
-
+prefix = 'DTU_10MW_rigid_hawc2s';
 prefix = append('HAWC_inputs/', prefix);
-
-
 
 
 %% P, T, CP, CT vs TSR
@@ -115,7 +110,10 @@ for i=1:length(pos)
    
     if pos(i) == 5 % alpha
         plot(tc, rad2deg(data(:,pos(i))), 'DisplayName', 'actual');
+        ylabel(name(i));
+        xlabel('t/c [\%]');
         hold on
+        grid on
         plot(tc, alpha, 'DisplayName', 'design');
         subplot(2,1,2)
         plot(r, rad2deg(data(:,pos(i))), 'DisplayName', 'actual');
@@ -124,7 +122,10 @@ for i=1:length(pos)
         
     elseif pos(i) == 18 % cl/cd
         plot(tc, data(:,pos(i)-1)./data(:,pos(i)), 'DisplayName', 'actual');
+        ylabel(name(i));
+        xlabel('t/c [\%]');
         hold on
+        grid on
         plot(tc, clcd, 'DisplayName', 'design');
         subplot(2,1,2)
         plot(r, data(:,pos(i)-1)./data(:,pos(i)), 'DisplayName', 'actual');
@@ -132,7 +133,10 @@ for i=1:length(pos)
         plot(r, clcd, 'DisplayName', 'design');
     elseif pos(i) == 17 % cl 
         plot(tc, data(:,pos(i)), 'DisplayName', 'actual');
+        ylabel(name(i));
+        xlabel('t/c [\%]');
         hold on
+        grid on
         plot(tc, cl, 'DisplayName', 'design');
         subplot(2,1,2)
         plot(r, data(:,pos(i)), 'DisplayName', 'actual');
@@ -142,7 +146,7 @@ for i=1:length(pos)
     
 
     grid on
-    xlabel('t/c [\%]');
+    xlabel('r [m]');
     ylabel(name(i));
     legend;
 %     xlim([min(tcratio), max(tcratio) ])
