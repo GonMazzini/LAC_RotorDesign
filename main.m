@@ -12,7 +12,7 @@ set(groot, 'defaultLegendInterpreter','latex');
 set(0,'defaultAxesFontSize',12);
 set(0, 'DefaultLineLineWidth', 1);
 set(0, 'DefaultFigureRenderer', 'painters');
-set(0,'DefaultFigureWindowStyle','normal') % docked
+set(0,'DefaultFigureWindowStyle','docked') % docked
 %% Tip radius scaling
 
 R1 = 178.3/2; % original radius
@@ -47,7 +47,8 @@ filenames = filenames([fileinfo.bytes]>0);
 %Airfoil models --> 24%, 30%, 36%, 48%, 60%, cylinder
 polars = true; % set true to see polars
 cl_des = zeros(1,length(filenames)-2); % exclude last 2 airfoils
-
+cd_des = zeros(1,length(filenames)-2); 
+alpha_des =  zeros(1,length(filenames)-2); 
 shift = [0.38, 0.3, 0.42, 0.2]; % shift cl
 
 for i=1:length(filenames)-2
@@ -135,7 +136,7 @@ clcd_des = cl_des./cd_des;
 
 % Fit curve to alpha design
 % Fitting first 4 points with polynomial
-p1_alpha = polyfit(tcratio(1:end-1), alpha_des(1:end-1), 3);
+p1_alpha = polyfit(tcratio(1:end-1), alpha_des(1:end-1), 2);
 x1 = linspace(tcratio(1), tcratio(end-1), 40);
 y1 = polyval(p1_alpha,x1);
 
@@ -185,11 +186,11 @@ p_t = polyfit(r, t, 6);
 y = polyval(p_t, linspace(0, R2, 100));
 
 figure;
-plot(data(:,1), t_dtu, 'x', 'DisplayName', 'DTU 10MW')
+plot(data(:,1)/R1, t_dtu, 'x', 'DisplayName', 'DTU 10MW')
 hold on
-plot(r, t, 'x','DisplayName', 'New design')
-plot(linspace(0, R2, 100), y, '--k',  'DisplayName', 'Fit')
-xlabel('r [m]')
+plot(r/R2, t, 'x','DisplayName', 'New design')
+plot(linspace(0, 1, 100), y, '--k',  'DisplayName', 'Fit')
+xlabel('r/R [-]')
 ylabel('t [m]')
 grid on
 legend

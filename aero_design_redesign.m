@@ -53,6 +53,12 @@ for i=1:length(rotor.beta)
     if rotor.beta(i)>25
         rotor.beta(i) = 25;
     end
+    tcratio = rotor.t(i)/rotor.c(i)*100;
+    if tcratio < 24.1
+        tcratio = 24.1;
+        rotor.c(i) = rotor.t(i)/(tcratio/100); 
+    end
+
     
     a = olddesign.r(1:6);
     b = olddesign.c(1:6);
@@ -70,8 +76,6 @@ for i=1:length(rotor.beta)
         rotor.c(i) = rotor.R/olddesign.r(end)*max(olddesign.c);
     end
        
-    
-      
 end
 
 
@@ -79,6 +83,7 @@ rotor.r_lst(end+1) = rotor.R;
 rotor.beta(end+1) = rotor.beta(end);
 rotor.t(end+1) = rotor.t(end)*0.55;
 rotor.c(end+1) = rotor.c(end)*0.55;
+
 
 
 %% Comparison of designs
@@ -130,11 +135,11 @@ function output = residuals(x, struct, struct2, idx, mode, olddesign)
         t = max(olddesign.t);
     end
     tcratio = t/c*100;
-    if tcratio < 24.1
-        tcratio = 24.1;
-        %c = t/(tcratio/100); 
-        t = c* (tcratio/100);
-    end
+%     if tcratio < 24.1
+%         tcratio = 24.1;
+%         c = t/(tcratio/100); 
+%         %t = c* (tcratio/100);
+%     end
     clcd = clcd_des(tcratio,struct2);
     cl = cl_des(tcratio,struct2);
     
