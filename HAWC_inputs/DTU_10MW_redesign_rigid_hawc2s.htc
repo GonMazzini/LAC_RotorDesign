@@ -308,11 +308,11 @@
     end rotating_threebladed_substructure;
   begin operational_data;
     windspeed 4 25 22;
-    genspeed 300 480; RPM (6 9.6)
+    genspeed 300 387; RPM (6 7.74)
     gearratio 50;
     minpitch 0.000000e+00;
     opt_lambda  7.25;
-    maxpow 11170.2;
+    maxpow 10700;
     prvs_turbine 1;
     include_torsiondeform 1;
     set_torque_limit 0;
