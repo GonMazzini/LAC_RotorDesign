@@ -8,36 +8,31 @@ set(groot, 'defaultLegendInterpreter','latex');
 set(0,'defaultAxesFontSize',12);
 set(0, 'DefaultLineLineWidth', 1);
 set(0, 'DefaultFigureRenderer', 'painters');
-set(0,'DefaultFigureWindowStyle','normal')
+set(0,'DefaultFigureWindowStyle','docked')
 
 
-%% 
+%% Folder and file settings
 
-TSR = 6:0.25:9;
+%File names
+path1 = 'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s'; %Main file 
+path2 = 'HAWC_inputs/DTU_10MW_redesign_rigid_hawc2s'; % rigid to correct deflections 
 
+%Operational file path:
+operational_file = 'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s.opt';
+%operational_file = 'HAWC_inputs/data/operation_7pt.dat';
+R = 97.77; %Rotor radius
 
-
-fileinfo = dir('HAWC_inputs');
-filenames = {fileinfo.name};
-filenames = filenames([fileinfo.bytes]>0);
-
-for i=1:length(filenames)
-    if strcmp(filenames{i}(end-2:end), 'pwr')
-        prefix = filenames{i}(1:end-4);
-        break
-    end
-end
-
-
-
-prefix = append('HAWC_inputs/', prefix);
-
-
-
-
+%Making operational vectors
+data = readtable(operational_file, 'Filetype', 'text');
+data = table2array(data);
+WSP = data(:,1);
+omega = data(:,3)*pi/30;
+pitch = data(:,2);
+TSR = round(omega*R./round(WSP,1),2);
+    
 %% P, T, CP, CT vs TSR
 
-data = readtable(append(prefix,'.pwr'), 'Filetype', 'text');
+data = readtable(append(path,'.pwr'), 'Filetype', 'text');
 data = table2array(data);
 
 P = data(:,2);
@@ -67,23 +62,16 @@ grid on
 
 %% Cl, alpha Cl/Cd vs t/c (design and actual)
 
-load('polynomials.mat');
+load('Aerodynamics\polynomials.mat');
 
 name = {'$\alpha$ [deg]' '$C_l$ [-]', '$C_l/C_d$ [-]'};
 pos = [5, 17, 18];
 desired_TSR = 6.75; %Choose desired TSR value
 
-% tcratio = 14:100;
-% for i=1:length(tcratio)
-%     alpha(i,1) = alpha_des(tcratio(i), polynomials);
-%     cl(i,1) = cl_des(tcratio(i), polynomials);
-%     clcd(i,1) = clcd_des(tcratio(i), polynomials);
-% end
 [tc, alpha, cl, clcd] = deal(zeros(length(data(:,1)), 1));
 
-
-idx = find(TSR == desired_TSR);
-filename = sprintf(append(prefix,'_u800%d.ind'), idx-1);
+[~, idx] = min(abs(TSR - TSRs(j)));
+filename = append(path,'_u',erase(num2str(WSP(idx)),'.'),'.ind');
 data = readtable(filename,'Filetype', 'text');
 data = table2array(data);
 r = data(:,1);
@@ -115,7 +103,10 @@ for i=1:length(pos)
    
     if pos(i) == 5 % alpha
         plot(tc, rad2deg(data(:,pos(i))), 'DisplayName', 'actual');
+        ylabel(name(i));
+        xlabel('t/c [\%]');
         hold on
+        grid on
         plot(tc, alpha, 'DisplayName', 'design');
         subplot(2,1,2)
         plot(r, rad2deg(data(:,pos(i))), 'DisplayName', 'actual');
@@ -124,7 +115,10 @@ for i=1:length(pos)
         
     elseif pos(i) == 18 % cl/cd
         plot(tc, data(:,pos(i)-1)./data(:,pos(i)), 'DisplayName', 'actual');
+        ylabel(name(i));
+        xlabel('t/c [\%]');
         hold on
+        grid on
         plot(tc, clcd, 'DisplayName', 'design');
         subplot(2,1,2)
         plot(r, data(:,pos(i)-1)./data(:,pos(i)), 'DisplayName', 'actual');
@@ -132,7 +126,10 @@ for i=1:length(pos)
         plot(r, clcd, 'DisplayName', 'design');
     elseif pos(i) == 17 % cl 
         plot(tc, data(:,pos(i)), 'DisplayName', 'actual');
+        ylabel(name(i));
+        xlabel('t/c [\%]');
         hold on
+        grid on
         plot(tc, cl, 'DisplayName', 'design');
         subplot(2,1,2)
         plot(r, data(:,pos(i)), 'DisplayName', 'actual');
@@ -142,7 +139,7 @@ for i=1:length(pos)
     
 
     grid on
-    xlabel('t/c [\%]');
+    xlabel('r [m]');
     ylabel(name(i));
     legend;
 %     xlim([min(tcratio), max(tcratio) ])
@@ -158,8 +155,8 @@ TSRs = [6.75]; %Choose desired TSR values (set equal to TSR for all)
 for i=1:length(pos)
     figure;
     for j=1:length(TSRs)
-    idx = find(TSR == TSRs(j));
-    filename = sprintf(append(prefix,'_u800%d.ind'),idx-1);
+    [~, idx] = min(abs(TSR - TSRs(j)));
+    filename = append(path,'_u',erase(num2str(WSP(idx)),'.'),'.ind');
     data = readtable(filename,'Filetype', 'text');
     data = table2array(data);
     if pos(i) == 5
@@ -180,10 +177,56 @@ for i=1:length(pos)
     
 end
 
-%% P, T, CP, CT vs V
-data =  readtable('HAWC_inputs/DTU_10MW_rigid_MWS_hawc2s.pwr','Filetype', 'text' );
-data = table2array(data);
+%% P, T, CP, CT, pitch, omega, tip deflect. vs WSP
+data_redesign_flex =  readtable(append(path1,'.pwr'),'Filetype', 'text' );
+data_redesign_flex = table2array(data_redesign_flex);
+data_redesign_rig =  readtable(append(path2,'.pwr'),'Filetype', 'text' );
+data_redesign_rig = table2array(data_redesign_rig);
 
+data_original_flex =  readtable('HAWC_inputs/original_design/DTU_10MW_flexible_hawc2s.pwr','Filetype', 'text' );
+data_original_flex = table2array(data_original_flex);
+data_original_rig =  readtable('HAWC_inputs/original_design/DTU_10MW_rigid_hawc2s.pwr','Filetype', 'text' );
+data_original_rig = table2array(data_original_rig);
+
+f1 = figure('Name', 'Power and Thrust Curves');
+f2 = figure('Name', 'Twist and Rotational Speed');
+f3 = figure('Name', 'Tip x');
+f4 = figure('Name', 'Tip y');
+f5 = figure('Name', 'Tip z');
+figs = [f3,f4,f5]; 
+leg = ['Redesign', 'original'];
+for i=1:3
+    if i==1
+        data_flex = data_redesign_flex;
+        data_rig = data_redesign_rig;
+        linestyle = '-';
+    elseif i==2
+        data_flex = data_original_flex;
+        data_rig = data_original_rig;
+        linestyle = '--';
+    end
+    
+    WSP = data_flex(:,1);
+    P = data_flex(:,2);
+    CP = data_flex(:,4);
+    T = data_flex(:,3);
+    CT = data_flex(:,5);
+    omega = data_flex(:,9);
+    pitch = data_flex(:,10);
+
+    set(0, 'currentfigure', f1)
+    subplot(2,1,1);
+    yyaxis left
+    plot(WSP,P, linestyle);
+    ylabel('P [kW]')
+    yyaxis right
+    plot(WSP,CP, linestyle);
+    ylabel('$C_P$ [-]')
+    xlabel('$U_{\infty}$ [m/s]')
+    grid on
+    hold on
+
+<<<<<<< HEAD
 v =  data(:,1);
 P = data(:,2);
 CP = data(:,4);
@@ -191,28 +234,44 @@ T = data(:,3);
 CT = data(:,5);
 pitch = data(:,9);
 rpm = data(:,10);
+=======
+    subplot(2,1,2);
+    yyaxis left
+    plot(WSP,T);
+    ylabel('T [kN]')
+    yyaxis right
+    plot(WSP,CT);
+    ylabel('$C_T$ [-]')
+    xlabel('$U_{\infty}$ [m/s]')
+    grid on
+    hold on
+>>>>>>> d971c00768699868776885e61bbdead6811367d4
 
-subplot(2,1,1);
-yyaxis left
-plot(v,P);
-ylabel('P [kW]')
-yyaxis right
-plot(v,CP);
-ylabel('$C_P$ [-]')
-xlabel('$U_{\infty}$ [m/s]')
-grid on
-
-subplot(2,1,2);
-yyaxis left
-plot(v,T);
-ylabel('T [kN]')
-yyaxis right
-plot(v,CT);
-ylabel('$C_T$ [-]')
-xlabel('$U_{\infty}$ [m/s]')
-grid on
+    set(0, 'currentfigure', f2)
+    yyaxis left
+    plot(WSP, pitch, linestyle);
+    ylabel('$\theta$ [deg]')
+    yyaxis right
+    plot(WSP, omega, linestyle);
+    ylabel('$\omega$ [rad/s]')
+    xlabel('$U_{\infty}$ [m/s]')
+    grid on
+    hold on
 
 
+    idx = [11, 12, 13];
+    label = {'$x$', '$y$', '$z$'};
+    for j=1:length(idx)
+        deflection = data_flex(:,idx(j)) - data_rig(:,idx(j));
+        set(0, 'currentfigure', figs(j))
+        plot(WSP, deflection, linestyle);
+        xlabel('$U_{\infty}$ [m/s]')
+        ylabel(append(label(j), ' [m]'))
+        grid on
+        hold on
+    end
+
+<<<<<<< HEAD
 figure()
 yyaxis left
 plot(v,pitch);
@@ -224,6 +283,9 @@ xlabel('$U_{\infty}$ [m/s]')
 grid on
 
 
+=======
+end
+>>>>>>> d971c00768699868776885e61bbdead6811367d4
 
 %% Functions
 
