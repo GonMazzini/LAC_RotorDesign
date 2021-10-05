@@ -200,10 +200,14 @@ for i=1:3
         data_flex = data_redesign_flex;
         data_rig = data_redesign_rig;
         linestyle = '-';
+        colour = [0.8500 0.3250 0.0980];
+        R = 97.77;
     elseif i==2
         data_flex = data_original_flex;
         data_rig = data_original_rig;
         linestyle = '--';
+        colour = 'black';
+        R = 178.3/2;
     end
     
     WSP = data_flex(:,1);
@@ -236,7 +240,7 @@ for i=1:3
     xlabel('$U_{\infty}$ [m/s]')
     grid on
     hold on
-
+    
     set(0, 'currentfigure', f2)
     yyaxis left
     plot(WSP, pitch, linestyle);
@@ -247,14 +251,17 @@ for i=1:3
     xlabel('$U_{\infty}$ [m/s]')
     grid on
     hold on
-
+    %legend('New design', 'Original')
 
     idx = [11, 12, 13];
     label = {'$x$', '$y$', '$z$'};
     for j=1:length(idx)
-        deflection = data_flex(:,idx(j));% - data_rig(:,idx(j));
+        deflection = data_flex(:,idx(j));
+        if idx(j) == 13
+            deflection = deflection/R;
+        end
         set(0, 'currentfigure', figs(j))
-        plot(WSP, deflection, linestyle);
+        plot(WSP, deflection, linestyle, 'Color', colour);
         xlabel('$U_{\infty}$ [m/s]')
         ylabel(append(label(j), ' [m]'))
         grid on
