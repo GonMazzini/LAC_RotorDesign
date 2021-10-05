@@ -32,7 +32,7 @@ TSR = round(omega*R./round(WSP,1),2);
     
 %% P, T, CP, CT vs TSR
 
-data = readtable(append(path,'.pwr'), 'Filetype', 'text');
+data = readtable(append(path1,'.pwr'), 'Filetype', 'text');
 data = table2array(data);
 
 P = data(:,2);
@@ -252,7 +252,7 @@ for i=1:3
     idx = [11, 12, 13];
     label = {'$x$', '$y$', '$z$'};
     for j=1:length(idx)
-        deflection = data_flex(:,idx(j)) - data_rig(:,idx(j));
+        deflection = data_flex(:,idx(j));% - data_rig(:,idx(j));
         set(0, 'currentfigure', figs(j))
         plot(WSP, deflection, linestyle);
         xlabel('$U_{\infty}$ [m/s]')
