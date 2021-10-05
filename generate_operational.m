@@ -13,9 +13,12 @@ type HAWC_inputs\data\operation_7pt.dat
 %% USE THIS SECTION FOR GENERATING MULTIPLE SPEED POINTS
 TSR = 6.75;
 R = 97.77;
-U_inf = 4:0.5:14;
+U_inf = 4:0.5:10.5;
 omega = TSR*U_inf/R*30/pi;
 
 T = table(U_inf', zeros(size(U_inf')), omega');
-writetable(T,'HAWC_inputs\data\operation_mult_WS.dat','Delimiter','\t', 'WriteVariableNames', false);
+writetable(T,'HAWC_inputs\data\operation_mult_WS_wPitch.dat','Delimiter','\t', 'WriteVariableNames', false);
 type HAWC_inputs\data\operation_mult_WS.dat
+
+%% USE THIS SECTION FOR CHANGING PITCH
+% TODO 

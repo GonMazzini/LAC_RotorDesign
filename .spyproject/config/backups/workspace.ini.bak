@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['aero_design.m', 'main.m', 'polynomios.py', '..\\..\\..\\..\\..\\Deep Learning\\MNIST_FFN.py', '..\\..\\..\\aero_design_exercise_mod.py']
+recent_files = ['main.m', '..\\..\\..\\..\\..\\Deep Learning\\MNIST_FFN.py']
 

@@ -3,7 +3,12 @@
 % Aerodynamic redesign of DTU 10MW
 %% Content of this script:  
 % - tip radius scaling (line 16 until 37)
-% - read airfoil data and plot polars (line 39 until 88)
+% - read airfoil data and plot polars for 4 FFA-XXX airfoils (line 39 until 105)
+% - set the shifts and calc design AoA for max(Cl)-shift
+% - fit a polynomio for Cl vs c/t -> fit a polynomio to Cl/Cd vs c/t
+% - Thickness scalling with rotor diameter relation
+% ====================
+
 clear all; close all; clc
 
 set(0,'defaulttextInterpreter','latex'); 
@@ -50,7 +55,7 @@ cl_des = zeros(1,length(filenames)-2); % exclude last 2 airfoils
 
 shift = [0.38, 0.3, 0.42, 0.2]; % shift cl
 
-for i=1:length(filenames)-2
+for i=1:length(filenames)-2 % loop through FFA-241,FFA-301-FFA-360-FFA-480
     % open data
     data = readtable(fullfile(path,filenames{i}));
     data = table2array(data);

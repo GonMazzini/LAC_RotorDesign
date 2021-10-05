@@ -189,6 +189,8 @@ P = data(:,2);
 CP = data(:,4);
 T = data(:,3);
 CT = data(:,5);
+pitch = data(:,9);
+rpm = data(:,10);
 
 subplot(2,1,1);
 yyaxis left
@@ -207,6 +209,17 @@ ylabel('T [kN]')
 yyaxis right
 plot(v,CT);
 ylabel('$C_T$ [-]')
+xlabel('$U_{\infty}$ [m/s]')
+grid on
+
+
+figure()
+yyaxis left
+plot(v,pitch);
+ylabel('$\theta$ [deg]')
+yyaxis right
+plot(v,rpm);
+ylabel('$\omega$ [RPM]')
 xlabel('$U_{\infty}$ [m/s]')
 grid on
 

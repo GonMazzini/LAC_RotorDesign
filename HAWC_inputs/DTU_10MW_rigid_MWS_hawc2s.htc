@@ -306,10 +306,10 @@
       second_order_actuator	pitch1 100 0.7;
     end rotating_threebladed_substructure;
     ; Operational data
-    operational_data_filename	./data/operation_mult_WS.dat;  file with operational data points
+    operational_data_filename	./data/operation_mult_WS_wPitch.dat;  file with operational data points
     ; HAWC2S commands (uncomment as needed);
     compute_steady_states	nobladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for other commands)
     save_power;	save steady-state values to .pwr
-    save_induction;	save spanwise values to many .ind files, 3 for each wind speed
+    ; save_induction;	save spanwise values to many .ind files, 3 for each wind speed
   end hawcstab2;
 exit;

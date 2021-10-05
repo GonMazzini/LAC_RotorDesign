@@ -8,8 +8,8 @@ olddesign.c = bladedat(:,3);
 olddesign.tc = bladedat(:,4);clear bladedat
 olddesign.t = olddesign.tc.*olddesign.c/100;
 
-rotor.R = 97.7;
-rotor.tsr = 6.75;
+rotor.R = 97.7; % 97.7
+rotor.tsr = 6.75; % 6.75
 rotor.B = 3;
 rotor.a = 1/3;
 
