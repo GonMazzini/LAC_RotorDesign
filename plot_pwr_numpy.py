@@ -18,7 +18,7 @@ import matplotlib.ticker as ticker
 f_name_1 = 'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s.pwr' #'./rigid_hs2_model/DTU_10MW_rigid_hawc2s.pwr' #
 f_name_2 = 'HAWC_inputs/original_design/DTU_10MW_flexible_hawc2s.pwr'# './flex_hs2_model/DTU_10MW_flex_hs2.pwr' #
 #
-p_lab = ['Rigid','Flex']
+p_lab = ['NewDesign','DTU_10MW']
 ch_i = [1,2,8,10,11,12] #[10,11,8,6] #
 # ============================================================================
 df_1 = np.loadtxt(f_name_1, skiprows=1)

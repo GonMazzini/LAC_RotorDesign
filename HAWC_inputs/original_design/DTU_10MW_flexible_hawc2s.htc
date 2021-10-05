@@ -323,7 +323,7 @@
 >>>>>>> d971c00768699868776885e61bbdead6811367d4:HAWC_inputs/original_design/DTU_10MW_flexible_hawc2s.htc
     ; HAWC2S commands (uncomment as needed);
     compute_optimal_pitch_angle use_operational_data;
-    compute_steady_states	nobladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for other commands)
+    compute_steady_states	bladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for other commands)
     save_power;	save steady-state values to .pwr
 <<<<<<< HEAD:HAWC_inputs/DTU_10MW_rigid_MWS_hawc2s.htc
     ; save_induction;	save spanwise values to many .ind files, 3 for each wind speed

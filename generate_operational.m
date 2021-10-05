@@ -11,7 +11,11 @@ writetable(T,'HAWC_inputs\data\operation_7pt.dat','Delimiter','\t', 'WriteVariab
 type HAWC_inputs\data\operation_7pt.dat
 
 %% USE THIS SECTION FOR GENERATING MULTIPLE SPEED POINTS
-TSR = 6.75;
+%Design TSR 7.25
+%Rated WSP 10.93 m/s
+%Rated omega 7.7397 RPM
+
+TSR = 7.25;
 R = 97.77;
 U_inf = 4:0.5:10.5;
 omega = TSR*U_inf/R*30/pi;
