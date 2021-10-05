@@ -32,3 +32,7 @@ for i=2:col
    ylabel(labels{i})
    legend
 end
+
+%%
+
+% TODO plot stiffness distributions
