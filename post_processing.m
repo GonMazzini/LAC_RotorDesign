@@ -254,16 +254,17 @@ for i=1:3
     %legend('New design', 'Original')
 
     idx = [11, 12, 13];
-    label = {'$x$', '$y$', '$z$'};
+    label = {'$x [m]$', '$y [m]$', '$z/R [-]$'};
     for j=1:length(idx)
         deflection = data_flex(:,idx(j));
         if idx(j) == 13
             deflection = deflection/R;
+            
         end
         set(0, 'currentfigure', figs(j))
         plot(WSP, deflection, linestyle, 'Color', colour);
         xlabel('$U_{\infty}$ [m/s]')
-        ylabel(append(label(j), ' [m]'))
+        ylabel(label(j))
         grid on
         hold on
     end
