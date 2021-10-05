@@ -205,11 +205,14 @@ for i=1:3
         data_rig = data_original_rig;
         linestyle = '--';
     end
-
+    
+    WSP = data_flex(:,1);
     P = data_flex(:,2);
     CP = data_flex(:,4);
     T = data_flex(:,3);
     CT = data_flex(:,5);
+    omega = data_flex(:,9);
+    pitch = data_flex(:,10);
 
     set(0, 'currentfigure', f1)
     subplot(2,1,1);
