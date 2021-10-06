@@ -308,7 +308,7 @@
     end rotating_threebladed_substructure;
   begin operational_data;
     windspeed 4 25 22;
-    genspeed 300 387; RPM (6 7.74)
+    genspeed 0 387; RPM (6 7.74)
     gearratio 50;
     minpitch 0.000000e+00;
     opt_lambda  7.25;
