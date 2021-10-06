@@ -200,10 +200,14 @@ for i=1:3
         data_flex = data_redesign_flex;
         data_rig = data_redesign_rig;
         linestyle = '-';
+        colour = [0.8500 0.3250 0.0980];
+        R = 97.77;
     elseif i==2
         data_flex = data_original_flex;
         data_rig = data_original_rig;
         linestyle = '--';
+        colour = 'black';
+        R = 178.3/2;
     end
     
     WSP = data_flex(:,1);
@@ -226,7 +230,6 @@ for i=1:3
     grid on
     hold on
 
-<<<<<<< HEAD
 v =  data(:,1);
 P = data(:,2);
 CP = data(:,4);
@@ -234,19 +237,10 @@ T = data(:,3);
 CT = data(:,5);
 pitch = data(:,9);
 rpm = data(:,10);
-=======
-    subplot(2,1,2);
-    yyaxis left
-    plot(WSP,T);
-    ylabel('T [kN]')
-    yyaxis right
-    plot(WSP,CT);
-    ylabel('$C_T$ [-]')
-    xlabel('$U_{\infty}$ [m/s]')
-    grid on
-    hold on
->>>>>>> d971c00768699868776885e61bbdead6811367d4
 
+=======
+    
+>>>>>>> f444cf61c06f2ab7668e4c42d20012fb65d2a3d7
     set(0, 'currentfigure', f2)
     yyaxis left
     plot(WSP, pitch, linestyle);
@@ -257,21 +251,24 @@ rpm = data(:,10);
     xlabel('$U_{\infty}$ [m/s]')
     grid on
     hold on
-
+    %legend('New design', 'Original')
 
     idx = [11, 12, 13];
-    label = {'$x$', '$y$', '$z$'};
+    label = {'$x [m]$', '$y [m]$', '$z/R [-]$'};
     for j=1:length(idx)
-        deflection = data_flex(:,idx(j));% - data_rig(:,idx(j));
+        deflection = data_flex(:,idx(j));
+        if idx(j) == 13
+            deflection = deflection/R;
+            
+        end
         set(0, 'currentfigure', figs(j))
-        plot(WSP, deflection, linestyle);
+        plot(WSP, deflection, linestyle, 'Color', colour);
         xlabel('$U_{\infty}$ [m/s]')
-        ylabel(append(label(j), ' [m]'))
+        ylabel(label(j))
         grid on
         hold on
     end
 
-<<<<<<< HEAD
 figure()
 yyaxis left
 plot(v,pitch);
@@ -283,9 +280,6 @@ xlabel('$U_{\infty}$ [m/s]')
 grid on
 
 
-=======
-end
->>>>>>> d971c00768699868776885e61bbdead6811367d4
 
 %% Functions
 
