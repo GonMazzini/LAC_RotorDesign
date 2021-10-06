@@ -24,8 +24,8 @@ ch_i = [1,2,8,10,11,12] #[10,11,8,6] #
 df_1 = np.loadtxt(f_name_1, skiprows=1)
 df_2 = np.loadtxt(f_name_2, skiprows=1)
 
-df_2[:,12] = df_2[:,12]/89.0
-df_1[:,12] = df_1[:,12]/97.7
+# df_2[:,12] = df_2[:,12]/89.0
+# df_1[:,12] = df_1[:,12]/97.7
 with open(f_name_1) as f:
     a = f.readline()
 b = list(filter(None,a.split('#')[1].split('   ')))
