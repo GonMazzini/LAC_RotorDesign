@@ -316,7 +316,7 @@
     ; set_torque_limit 0;
   ; end operational_data;
     ; Operational data
-    operational_data_filename	./data/DTU_10MW_redesign_flexbile_hawc2s.opt;  ./DTU_10MW_rigid_hawc2s.opt ;file with operational data points
+    operational_data_filename	./data/DTU_10MW_redesign_flexible_hawc2s.opt;  ./DTU_10MW_rigid_hawc2s.opt ;file with operational data points
     ; HAWC2S commands (uncomment as needed);
     ;compute_optimal_pitch_angle use_operational_data;
     compute_steady_states	bladedeform tipcorrect induction nogradients;	compute steady states using hawcstab2 (need for other commands)
