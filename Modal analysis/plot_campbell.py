@@ -4,22 +4,28 @@ Load a structural and aeroelastic Campbell diagram and plot it.
 """
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+from pathlib import Path
 
+cwd = os.getcwd()
+cwd = cwd.replace('\\','/')
+path = Path(cwd).parent
+path = Path(str(path) + '\HAWC_inputs\data\DTU_10MW_redesign_flexible_hawc2s.opt')
 
-struc_path = './dtu_10mw_structural.cmb'  # either None or path to structural .cmb file
-aero_path = './dtu_10mw_aeroelastic.cmb'  # either None or path to aeroelastic .cmb file
+struc_path = 'structural.cmb'  # either None or path to structural .cmb file
+aero_path = 'aeroelastic.cmb'  # either None or path to aeroelastic .cmb file
 min_wsp = 4  # minimum wind speed to plot
 max_modes = 11  # maximum number of modes to plot
-opt_path = 'C:/Users/rink/git/lac-course-private/dtu-10mw-rwt/data/operation_flex.dat'  # opt path for 1P, 3P, 6P lines
+opt_path = path  # opt path for 1P, 3P, 6P lines
 save_fig = False  # save the figures to png?
 
 # identification of modes for structural and aeroelastic campbell diagram
-modes_struc = ['1. 1st Twr FA', '2. 1st Twr SS', '3. 1st BW flap', '4. 1st SYM flap',  
-              '5. 1st FW flap', '6. 1st BW edge', '7. 1st FW edge', '8. 2nd BW flap',  
-              '9. 2nd FW flap', '10. 2nd SYM flap', '11. 1st COL edge'] 
-modes_aero = ['1. 1st Twr SS', '2. 1st Twr FA', '3. 1st BW flap', '4. 1st SYM flap',  
-              '5. 1st FW flap', '6. 1st BW edge', '7. 1st FW edge', '8. 2nd BW flap', 
-              '9. 2nd FW flap', '10. 2nd SYM flap', '11. 1st COL edge'] 
+modes_struc = ['1. 1st Twr FA', '2. 1st Twr SS', '3. 1st BW flap', '4. 1st SYM flap',
+              '5. 1st FW flap', '6. 1st BW edge', '7. 1st FW edge', '8. 2nd BW flap',
+              '9. 2nd FW flap', '10. 2nd SYM flap', '11. 1st COL edge']
+modes_aero = ['1. 1st Twr SS', '2. 1st Twr FA', '3. 1st BW flap', '4. 1st SYM flap',
+              '5. 1st FW flap', '6. 1st BW edge', '7. 1st FW edge', '8. 2nd BW flap',
+              '9. 2nd FW flap', '10. 2nd SYM flap', '11. 1st COL edge']
 
 
 #%% Define useful functions
@@ -126,15 +132,15 @@ if struc_path is not None:
 
     # freqs and damps for no-aero
     u_struc, f_struc, d_struc = load_campbell(struc_path, min_wsp=min_wsp, max_modes=max_modes)
-    
+
     # plot the campbell diagram
     fig, axs = plot_freqs_vs_wsp(u_struc, f_struc, fig_num=1, labels=modes_struc)
     if save_fig: fig.savefig('campbell_structural.png', dpi=150)
-    
+
     # plot the damping
     fig, axs = plot_damp_vs_wsp(u_struc, d_struc, fig_num=2, labels=modes_aero)
     if save_fig: fig.savefig('damping_structural.png', dpi=150)
-        
+
 
 # =================== aeroelastic campbell diagram ===================
 
@@ -142,11 +148,11 @@ if aero_path is not None:
 
     # freqs and damps for aero
     u_aero, f_aero, d_aero = load_campbell(aero_path, min_wsp=min_wsp, max_modes=max_modes)
-    
+
     # plot the campbell diagram
     fig, axs = plot_freqs_vs_wsp(u_aero, f_aero, fig_num=3, opt_path=opt_path, labels=modes_aero)
     if save_fig: fig.savefig('campbell_aeroelastic.png', dpi=150)
-    
+
     # plot the damping
     fig, axs = plot_damp_vs_wsp(u_aero, d_aero, fig_num=4, labels=modes_aero)
     if save_fig: fig.savefig('damping_aeroelastic.png', dpi=150)
