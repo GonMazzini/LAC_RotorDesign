@@ -18,7 +18,7 @@ path1 = 'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s'; %Main file
 path2 = 'HAWC_inputs/DTU_10MW_redesign_rigid_hawc2s'; % rigid to correct deflections 
 
 %Operational file path:
-operational_file = 'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s.opt';
+operational_file = 'HAWC_inputs/data/DTU_10MW_redesign_flexible_hawc2s.opt';
 %operational_file = 'HAWC_inputs/data/operation_7pt.dat';
 R = 97.77; %Rotor radius
 
@@ -188,25 +188,29 @@ data_original_flex = table2array(data_original_flex);
 data_original_rig =  readtable('HAWC_inputs/original_design/DTU_10MW_rigid_hawc2s.pwr','Filetype', 'text' );
 data_original_rig = table2array(data_original_rig);
 
-f1 = figure('Name', 'Power and Thrust Curves');
-f2 = figure('Name', 'Twist and Rotational Speed');
-f3 = figure('Name', 'Tip x');
-f4 = figure('Name', 'Tip y');
-f5 = figure('Name', 'Tip z');
-figs = [f3,f4,f5]; 
-leg = ['Redesign', 'original'];
-for i=1:3
+f1 = figure('Name', 'Power Curve');
+f2 = figure('Name', 'Thrust Curves');
+f3 = figure('Name', 'Twist');
+f4 = figure('Name', 'Rotational Speed');
+f5 = figure('Name', 'Tip x');
+f6 = figure('Name', 'Tip y');
+f7 = figure('Name', 'Tip z');
+figs = [f5,f6,f7]; 
+%leg = ['Redesign', 'original'];
+for i=1:2
     if i==1
         data_flex = data_redesign_flex;
         data_rig = data_redesign_rig;
         linestyle = '-';
         colour = [0.8500 0.3250 0.0980];
+        lab = 'Redesign';
         R = 97.77;
     elseif i==2
         data_flex = data_original_flex;
         data_rig = data_original_rig;
-        linestyle = '--';
+        linestyle = '--k';
         colour = 'black';
+        lab = 'DTU 10MW';
         R = 178.3/2;
     end
     
@@ -215,58 +219,58 @@ for i=1:3
     CP = data_flex(:,4);
     T = data_flex(:,3);
     CT = data_flex(:,5);
-    omega = data_flex(:,9);
-    pitch = data_flex(:,10);
+    omega = data_flex(:,10);
+    pitch = data_flex(:,9);
 
     set(0, 'currentfigure', f1)
-    subplot(2,1,1);
-    yyaxis left
-    plot(WSP,P, linestyle);
+    plot(WSP,P, linestyle, 'Color', colour, 'DisplayName', lab);
     ylabel('P [kW]')
-    yyaxis right
-    plot(WSP,CP, linestyle);
-    ylabel('$C_P$ [-]')
     xlabel('$U_{\infty}$ [m/s]')
     grid on
     hold on
-
-    subplot(2,1,2);
-    yyaxis left
-    plot(WSP,T);
-    ylabel('T [kN]')
-    yyaxis right
-    plot(WSP,CT);
-    ylabel('$C_T$ [-]')
-    xlabel('$U_{\infty}$ [m/s]')
-    grid on
-    hold on
+    legend('Location', 'Best')
     
     set(0, 'currentfigure', f2)
-    yyaxis left
-    plot(WSP, pitch, linestyle);
+    plot(WSP,T, linestyle, 'Color', colour, 'DisplayName', lab);
+    ylabel('T [kN]')
+    xlabel('$U_{\infty}$ [m/s]')
+    grid on
+    hold on
+    legend
+    
+    set(0, 'currentfigure', f3)
+    plot(WSP, pitch, linestyle, 'Color', colour, 'DisplayName', lab);
     ylabel('$\theta$ [deg]')
-    yyaxis right
-    plot(WSP, omega, linestyle);
+    grid on
+    hold on
+    legend('Location', 'Best')
+    
+    set(0, 'currentfigure', f4) 
+    plot(WSP, omega, linestyle, 'Color', colour, 'DisplayName', lab);
     ylabel('$\omega$ [rad/s]')
     xlabel('$U_{\infty}$ [m/s]')
     grid on
     hold on
-    %legend('New design', 'Original')
+    legend
 
     idx = [11, 12, 13];
-    label = {'$x [m]$', '$y [m]$', '$z/R [-]$'};
+    label = {'$\Delta x$ [m]', '$y$ [m]', '$\Delta z$ [m]'};
     for j=1:length(idx)
         deflection = data_flex(:,idx(j));
         if idx(j) == 13
-            deflection = deflection/R;
-            
+            deflection = data_flex(:,idx(j)) - data_rig(:,idx(j));
+        elseif idx(j) == 12
+            deflection = data_flex(:,idx(j)) - data_rig(:,idx(j));
+        elseif idx(j) == 11
+            deflection = data_flex(:,idx(j));
         end
         set(0, 'currentfigure', figs(j))
-        plot(WSP, deflection, linestyle, 'Color', colour);
+        plot(WSP, deflection, linestyle, 'Color', colour, 'DisplayName', lab);
         xlabel('$U_{\infty}$ [m/s]')
         ylabel(label(j))
         grid on
         hold on
+        legend
     end
 
 end
