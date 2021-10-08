@@ -91,8 +91,8 @@ def plot_freqs_vs_wsp(wsps, freqs, fig_num=1, labels=None, opt_path=None):
         opt_wsp, opt_rotspd = np.loadtxt(opt_path, skiprows=1, usecols=[0, 2]).T
         opt_rotspd = opt_rotspd[opt_wsp >= wsps.min()] / 60  # in Hz
         opt_wsp = opt_wsp[opt_wsp >= wsps.min()]
-        lines = [ax.plot(opt_wsp, opt_rotspd*3*(i+1), '0.2', alpha=0.8,
-                         linestyle=['--', '-.', ':'][i])[0]
+        lines = [ax.plot(opt_wsp, opt_rotspd*np.max([3*i, 1]),
+                         '0.2', alpha=0.8, linestyle=['--', '-.', ':'][i])[0]
                  for i in range(3)]
         handles += lines
         labels = labels + ['1P', '3P', '6P']
