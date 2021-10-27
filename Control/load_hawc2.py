@@ -37,30 +37,52 @@ def load_hawc_binary(dat_path):
             j += 1
     return data
 
+#%% Importing datasets
 
+#Place .dat files insisde "results" folder and name each case 'dtu_10mw_rwt_CX.dat'
 cwd = os.getcwd()
 cwd = cwd.replace('\\','/')
-folder = cwd + '/res/'
+folder = cwd + '/results/'
+
+cases = ['C2', 'C3'] #Add cases you want to plot
+
+data_lst = []
+for c in range(len(cases)):
+    path = folder + 'dtu_10mw_rwt_' + cases[c] + '.dat'
+    data = load_hawc_ascii(path)
+    data_lst.append(data)
+
+#%% Plotting
 
 itime = 0  # column index of time
 irotspd = 9  # column index of rotor speed
-
-# -------- ascii --------
-case = 'C2'
-path = folder + 'dtu_10mw_rwt_' + case + '.dat'
-#%%
-data = load_hawc_ascii(path)
-
-# -------- hawc binary --------
-# name = 'hawc_binary'
-# dat_path = folder + 'dtu_10mw_rwt_' + name + '.dat'
-# data = load_hawc_binary(dat_path)
-
+iwspd = 14 # column index of wind speed
+ipitch = 70 # column index of pitch angle
+iepower = 99 # column index of electrical power
 
 # ====================== plot things for fun ======================
-time = data[:, itime]
-rotspd = data[:, irotspd]
-fig, ax = plt.subplots(num=1, clear=True, figsize=(7, 3))
-ax.plot(time, rotspd)
-ax.set(xlabel='Time [s]', ylabel='Rotor speed [rad/s]')
-fig.tight_layout()
+idx = [irotspd, iwspd, ipitch, iepower]
+leg = ['$\omega$ [rad/s]', '$V_{\infty}$ [m/s]', r'$\theta$ [deg]', '$P_{electric}$ [MW]']
+for i in range(4):
+    plt.figure()
+    for j in range(len(cases)):
+        data = data_lst[j]
+        time = data[:, itime]
+        y = data[:, idx[i]]
+        if idx[i] == ipitch:
+            y = np.rad2deg(y)
+        elif idx[i] == iepower:
+            y = y/10**6
+        plt.plot(time, y, label=cases[j])
+    plt.ylabel(leg[i])
+    plt.xlabel('t [s]')
+    plt.grid()
+    plt.legend()
+
+
+
+
+
+
+
+
