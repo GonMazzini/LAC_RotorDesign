@@ -180,9 +180,9 @@ freqs[:,0] = f_reordered
 freqs[:,1] = f_reordered - omega
 freqs[:,2] = f_reordered + omega
 freqs[3, 1:3] = freqs[3,0]
-freqs[7, 1:3] = freqs[7,0]
+freqs[6, 1:3] = freqs[6,0]
 
-df = pd.DataFrame(freqs, columns = ['Tower [Hz]', 'Blades FW [Hz]', 'Blades BW [Hz]'])
+df = pd.DataFrame(freqs, columns = ['Tower [Hz]', 'Blade signal FW [Hz]', 'Blade signal BW [Hz]'])
 df.index = modes_aero[idx_reorder]
 df = df.round(3)
 
