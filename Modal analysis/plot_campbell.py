@@ -157,3 +157,31 @@ if aero_path is not None:
     fig, axs = plot_damp_vs_wsp(u_aero, d_aero, fig_num=4, labels=modes_aero)
     if save_fig: fig.savefig('damping_aeroelastic.png', dpi=150)
 
+#%% Tower (NR) and blade (R) frequencies
+
+import pandas as pd
+
+wsp = 15
+omega = 7.74 #RPM
+omega = omega*np.pi/30/2/np.pi
+wsp_idx = np.asarray(np.where(u_aero==wsp))[0][0]
+
+f = f_aero[wsp_idx,:]
+modes_aero = np.array(['1. 1st Twr FA', '2. 1st Twr SS', '3. 1st BW flap', '4. 1st FW flap',
+              '5. 1st SYM flap', '6. 1st BW edge', '7. 1st FW edge', '8. 2nd BW flap',
+              '9. 2nd FW flap', '10. 2nd SYM flap', '11. 1st SYM edge', '12. 1st DT'])
+
+idx_reorder = np.array([1, 2, 3, 5, 4, 6, 11, 7])-1
+f_reordered = f[idx_reorder]
+
+idx_nonsym = np.array([1, 2, 3, 5, 6, 7])-1
+freqs = np.zeros((len(f_reordered),3))
+freqs[:,0] = f_reordered
+freqs[:,1] = f_reordered - omega
+freqs[:,2] = f_reordered + omega
+freqs[3, 1:3] = freqs[3,0]
+freqs[7, 1:3] = freqs[7,0]
+
+df = pd.DataFrame(freqs, columns = ['Tower [Hz]', 'Blades FW [Hz]', 'Blades BW [Hz]'])
+df.index = modes_aero[idx_reorder]
+df = df.round(3)
