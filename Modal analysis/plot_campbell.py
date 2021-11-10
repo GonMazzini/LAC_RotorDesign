@@ -167,9 +167,9 @@ omega = omega*np.pi/30/2/np.pi
 wsp_idx = np.asarray(np.where(u_aero==wsp))[0][0]
 
 f = f_aero[wsp_idx,:]
-modes_aero = np.array(['1. 1st Twr FA', '2. 1st Twr SS', '3. 1st BW flap', '4. 1st FW flap',
-              '5. 1st SYM flap', '6. 1st BW edge', '7. 1st FW edge', '8. 2nd BW flap',
-              '9. 2nd FW flap', '10. 2nd SYM flap', '11. 1st SYM edge', '12. 1st DT'])
+modes_aero = np.array(['1st Twr FA', '1st Twr SS', '1st BW flap', '1st FW flap',
+              '1st SYM flap', '1st BW edge', '1st FW edge', '2nd BW flap',
+              '2nd FW flap', '2nd SYM flap', '1st SYM edge', '1st DT'])
 
 idx_reorder = np.array([1, 2, 3, 5, 4, 6, 11, 7])-1
 f_reordered = f[idx_reorder]
@@ -185,3 +185,5 @@ freqs[7, 1:3] = freqs[7,0]
 df = pd.DataFrame(freqs, columns = ['Tower [Hz]', 'Blades FW [Hz]', 'Blades BW [Hz]'])
 df.index = modes_aero[idx_reorder]
 df = df.round(3)
+
+print(df.to_latex())
