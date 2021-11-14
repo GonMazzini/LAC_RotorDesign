@@ -228,23 +228,6 @@ for i=1:2
     xlabel('$U_{\infty}$ [m/s]')
     grid on
     hold on
-<<<<<<< HEAD
-
-v =  data(:,1);
-P = data(:,2);
-CP = data(:,4);
-T = data(:,3);
-CT = data(:,5);
-pitch = data(:,9);
-rpm = data(:,10);
-
-=======
-    
->>>>>>> f444cf61c06f2ab7668e4c42d20012fb65d2a3d7
-    set(0, 'currentfigure', f2)
-    yyaxis left
-    plot(WSP, pitch, linestyle);
-=======
     legend('Location', 'Best')
     
     set(0, 'currentfigure', f2)
@@ -257,7 +240,6 @@ rpm = data(:,10);
     
     set(0, 'currentfigure', f3)
     plot(WSP, pitch, linestyle, 'Color', colour, 'DisplayName', lab);
->>>>>>> fa158ae22cfd4c4c85f0da9c2b23a2b899131755
     ylabel('$\theta$ [deg]')
     grid on
     hold on
@@ -291,17 +273,7 @@ rpm = data(:,10);
         legend
     end
 
-figure()
-yyaxis left
-plot(v,pitch);
-ylabel('$\theta$ [deg]')
-yyaxis right
-plot(v,rpm);
-ylabel('$\omega$ [RPM]')
-xlabel('$U_{\infty}$ [m/s]')
-grid on
-
-
+end
 
 %% Functions
 
