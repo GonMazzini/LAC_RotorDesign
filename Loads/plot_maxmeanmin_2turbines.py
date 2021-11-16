@@ -1,12 +1,15 @@
 # -*- coding: utf-8 -*-
 """Plot a statistic versus wind speed.
+
+
+COMPARE THE DTU 10 MW AND REDESIGN 
 """
 import matplotlib.pyplot as plt
 from _loads_utils import load_stats
 
 
-stat_dir1 = 'C:/Users/Mathieu Pellé/Documents/EWEM/S3/LAC/46320_LAC/Loads/design-loads-aep/dtu10mw_res/dtu10mw_tca/'  # stats file, turbine 1  !!! END WITH SLASH !!! DTU 10MW!!!!
-stat_dir2 = 'C:/Users/Mathieu Pellé/Documents/GitHub/LAC_RotorDesign/Loads/res_turb/'  # stats file, turbine 2  !!! END WITH SLASH !!!
+stat_dir1 = './dtu10mw_res/dtu10mw_tca/'  # stats file, turbine 1  !!! END WITH SLASH !!! DTU 10MW!!!!
+stat_dir2 = './res_turb/'  # stats file, turbine 2  !!! END WITH SLASH !!!
 labels = ['DTU 10 MW', 'DTU 10 MW Redesign']  # legend labels
 
 # values to plot and indices of that value for the two turbines

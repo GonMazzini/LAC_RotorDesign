@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 """An exercise to plot the mean loads for a series of channels and comapre to the theory.
 """
+
+"""Este script compara los resultados de HAWC2S (.pwr) con los steady results de HAWC2 """
+
+
 import matplotlib.pyplot as plt
 import numpy as np
 from _loads_utils import load_stats, load_hawc2s
@@ -18,9 +22,9 @@ Mgrav = 6200*1.05  # yaw-bearing pitch moment due to gravity [kNm]
 channels = {4: 'Pitch angle [deg]',
             10: 'Rotor speed [rad/s]',
             13: 'Thrust [kN]',
-            70: 'Generator torque [Nm]',
-            100: 'Electrical power [W]',
-            61: 'Angle of attack @ 2/3 R [deg]',
+            70: 'Generator torque [Nm]', # was 72
+            100: 'Electrical power [W]', # was 102
+            61: 'Angle of attack @ 2/3 R [deg]', # was 63 ... and so on
             64: 'Cl @ 2/3 R [-]',
             17: 'Tower-base FA [kNm]',
             18: 'Tower-base SS [kNm]',

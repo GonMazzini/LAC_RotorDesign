@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 """Calculate statistics and short-term fatigue loads from HAWC2 output files.
 
+!!!!!!!! CALCULA LOAS ESTADISTICAS EN BASE A LOS RESULTADOS DE HAWC2
+
+
 Requirements to run file:
     - All HAWC2 outputs must be in the same folder.
     - All HAWC2 output files in the folder must have the same channels and channel order.
@@ -16,6 +19,8 @@ How to run this file:
     4. There should now be a collection of files in the results folder with different
        statistics.
 """
+
+
 import os
 import numpy as np
 from _proc_hawc2_utils import initialize_stat, calculate_stat, update_stat

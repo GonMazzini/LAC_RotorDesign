@@ -180,7 +180,7 @@ ylabel('Design $C_l/C_d$')
 
 %% Thickness scaling
 
-data = readtable('blade_original/DTU_10MW_RWT_ae', 'Filetype', 'text');
+data = readtable('../blade_original/DTU_10MW_RWT_ae', 'Filetype', 'text');
 data = table2array(data(:,1:4));
 
 t_dtu = data(:,3).*data(:,2)/100;
