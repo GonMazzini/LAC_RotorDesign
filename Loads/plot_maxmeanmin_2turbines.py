@@ -97,7 +97,6 @@ for i, (ylabel, idx_t1, idx_t2) in enumerate(plot_vals):
         handles.append(l)
 
     if 'AoA' in ylabel:
-        print('her')
         ax.legend(handles=[pb1, pb2],
                   labels=['', 'DTU 10 MW Redesign'], ncol=2, handletextpad=0.5, handlelength=1.0, columnspacing=-0.5,
           loc='best', fontsize=10)
@@ -108,7 +107,6 @@ for i, (ylabel, idx_t1, idx_t2) in enumerate(plot_vals):
         ax.legend(handles=[pa2, pb2],
                   labels=['DTU 10MW', 'DTU 10 MW Redesign'], ncol=1, handletextpad=0.5, handlelength=1.0, columnspacing=-0.5, loc='best', fontsize=10)
     else:
-        print('t', ylabel)
         ax.legend(handles=[pa1, pb1, pa2, pb2],
                   labels=['', '', 'DTU 10MW', 'DTU 10 MW Redesign'], ncol=2, handletextpad=0.5, handlelength=1.0, columnspacing=-0.5,
           loc='best', fontsize=10)
