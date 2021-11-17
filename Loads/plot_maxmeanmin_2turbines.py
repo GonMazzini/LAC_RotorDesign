@@ -2,6 +2,7 @@
 """Plot a statistic versus wind speed.
 """
 import matplotlib.pyplot as plt
+from matplotlib.patches import Patch
 from _loads_utils import load_stats
 
 
@@ -48,6 +49,11 @@ _, _, mins_2 = load_stats(stat_dir2 + 'stats_min.txt')  # mins
 _, _, maxs_2 = load_stats(stat_dir2 + 'stats_max.txt')  # maxs
 wind_2 = means_2[:, idxs_2 == wind_idxs[1]]
 
+pa1 = Patch(facecolor='green', edgecolor='black')
+pa2 = Patch(facecolor='purple', edgecolor='black')
+#
+pb1 = Patch(facecolor='b', edgecolor='black')
+pb2 = Patch(facecolor='r', edgecolor='black')
 # plotting settings for that turbine
 # m = markers[iturb]; mec = colors[iturb]
 
@@ -90,10 +96,22 @@ for i, (ylabel, idx_t1, idx_t2) in enumerate(plot_vals):
             ax.plot(wind, maxval, marker='.', mec=mec, mfc='none',  alpha=0.8, linestyle='none')
         handles.append(l)
 
-    if 'AoA' or 'Cl' in ylabel:
-        ax.legend(handles=handles, labels=labels)
+    if 'AoA' in ylabel:
+        print('her')
+        ax.legend(handles=[pb1, pb2],
+                  labels=['', 'DTU 10 MW Redesign'], ncol=2, handletextpad=0.5, handlelength=1.0, columnspacing=-0.5,
+          loc='best', fontsize=10)
+    elif 'Cl' in ylabel:
+        ax.legend(handles=[pb1, pb2],
+                  labels=['', 'DTU 10 MW Redesign'], ncol=2, handletextpad=0.5, handlelength=1.0, columnspacing=-0.5, loc='best', fontsize=10)
+    elif 'clearance' in ylabel:
+        ax.legend(handles=[pa2, pb2],
+                  labels=['DTU 10MW', 'DTU 10 MW Redesign'], ncol=1, handletextpad=0.5, handlelength=1.0, columnspacing=-0.5, loc='best', fontsize=10)
     else:
-        ax.legend(handles=handles, labels=['DTU 10 MW Redesign'])
+        print('t', ylabel)
+        ax.legend(handles=[pa1, pb1, pa2, pb2],
+                  labels=['', '', 'DTU 10MW', 'DTU 10 MW Redesign'], ncol=2, handletextpad=0.5, handlelength=1.0, columnspacing=-0.5,
+          loc='best', fontsize=10)
     fig.tight_layout()
 
     plt.show()
