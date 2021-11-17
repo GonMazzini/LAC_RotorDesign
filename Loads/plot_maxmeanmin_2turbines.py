@@ -90,7 +90,10 @@ for i, (ylabel, idx_t1, idx_t2) in enumerate(plot_vals):
             ax.plot(wind, maxval, marker='.', mec=mec, mfc='none',  alpha=0.8, linestyle='none')
         handles.append(l)
 
-    ax.legend(handles=handles, labels=labels)
+    if 'AoA' or 'Cl' in ylabel:
+        ax.legend(handles=handles, labels=labels)
+    else:
+        ax.legend(handles=handles, labels=['DTU 10 MW Redesign'])
     fig.tight_layout()
 
     plt.show()
