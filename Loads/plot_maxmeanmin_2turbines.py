@@ -5,8 +5,8 @@ import matplotlib.pyplot as plt
 from _loads_utils import load_stats
 
 
-stat_dir1 = 'C:/Users/Mathieu Pellé/Documents/EWEM/S3/LAC/46320_LAC/Loads/design-loads-aep/dtu10mw_res/dtu10mw_tca/'  # stats file, turbine 1  !!! END WITH SLASH !!! DTU 10MW!!!!
-stat_dir2 = 'C:/Users/Mathieu Pellé/Documents/GitHub/LAC_RotorDesign/Loads/res_turb/'  # stats file, turbine 2  !!! END WITH SLASH !!!
+stat_dir1 = './dtu10mw_res/dtu10mw_tca/'  # stats file, turbine 1  !!! END WITH SLASH !!! DTU 10MW!!!!
+stat_dir2 = './res_turb/'  # stats file, turbine 2  !!! END WITH SLASH !!!
 labels = ['DTU 10 MW', 'DTU 10 MW Redesign']  # legend labels
 
 # values to plot and indices of that value for the two turbines
@@ -34,8 +34,8 @@ plot_vals = [['Pitch angle [deg]',       4,    4],
 
 axs = []  # initialize list of axes
 # colors = ['#1f77b4', '#ff7f0e']  # colors for turbines 1 and 2
-colors = ['0.3', 'r']  # colors for turbines 1 and 2
-colors1 = ['0.3', 'b']  # colors for turbines 1 and 2
+colors = ['purple', 'r']  # colors for turbines 1 and 2
+colors1 = ['g', 'b']  # colors for turbines 1 and 2
 markers = ['x', '.']  # markers for turbines 1 and 2
 
 # load the stats data for turbines 1 and 2 (it's ugly i'm sorry)
@@ -76,7 +76,8 @@ for i, (ylabel, idx_t1, idx_t2) in enumerate(plot_vals):
         maxval = maxs[:, idxs == chan_idx]
 
         # get plotting marker and color
-        m = markers[iturb]; mec = colors[iturb]
+        m = markers[iturb]
+        mec = colors[iturb]
         mec1 = colors1[iturb]
 
         # only plot minimum value if tower clearance
