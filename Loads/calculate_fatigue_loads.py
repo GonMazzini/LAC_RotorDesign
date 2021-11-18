@@ -14,7 +14,7 @@ from _loads_utils import load_stats
 stat_dir1 = './dtu10mw_res/dtu10mw_tca/'
 stat_dir2 = './res_turb/'  # results directory with statistics files  !!! END WITH SLASH !!!
 stat_dirs = [stat_dir1, stat_dir2]
-labels = ['DTU 10 MW', 'DTU 10 MW mean', 'DTU 10 MW Redesign', 'DTU 10 MW Redesign mean']
+labels = ['DTU 10 MW', 'DTU 10 MW (mean)', 'DTU 10 MW Redesign', 'DTU 10 MW Redesign (mean)']
 
 i_plot = [17, 18, 20, 21, 25, 26, 27, 108]  # channel indices in .sel file that you want to process
 i_wind = 15  # channel number with the wind speed
