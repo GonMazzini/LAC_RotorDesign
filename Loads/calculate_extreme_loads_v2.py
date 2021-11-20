@@ -81,11 +81,13 @@ for i, chan_idx in enumerate(i_plot):
     # make the plot
     fig = plt.figure(1 + i, figsize=(7, 3), clear=True)
     plt.plot(wind, minval, 'o')  # minimum values
-    plt.plot(wsp_unique, mean_min, 'or', mec='0.2', ms=7, alpha=0.8)  # plot mean extremes for fun
     plt.plot(wind, maxval, 'o')  # maximum values
+    plt.plot(wsp_unique, mean_min, 'or', mec='0.2', ms=7, alpha=0.8)  # plot mean extremes for fun
+    
     plt.plot(wsp_unique, mean_max, 'or', mec='0.2', ms=7, alpha=0.8)  # plot mean extremes for fun
     plt.plot(wind, extr_design_load * np.ones_like(wind), lw=2, c='0.2')  # extreme design load
     plt.grid('on')
+    plt.legend(['Min','Max'])
     plt.xlabel('Wind speed [m/s]')
     plt.ylabel(ylabel)
     plt.tight_layout()

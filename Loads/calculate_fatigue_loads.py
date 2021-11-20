@@ -97,9 +97,9 @@ for i, chan_idx in enumerate(i_plot):
 
         # plot short-term dels versus wind speed
 
-        plt.plot(wind, data, marker[t])
+        plt.plot(wind, data, marker[t], markersize=5 , alpha = 0.6)
         # for fun, plot the wind-speed-averaged DELs on top
-        plt.plot(wsp_uniqe, st_dels, marker2[t], mec='0.2', ms=7, alpha=0.9)
+        plt.plot(wsp_uniqe, st_dels, marker2[t], markersize=10, mec='0.2', ms=7, alpha=0.95)
 
         # calculate the lifetime damage equivalent load
         v_ave = 0.2 * v_ref[t]  # average wind speed per IEC 61400-1
