@@ -89,5 +89,6 @@ for i, chan_idx in enumerate(i_plot):
     plt.xlabel('Wind speed [m/s]')
     plt.ylabel(ylabel)
     plt.tight_layout()
+    plt.legend(['min', 'max'])
 
 plt.show()
