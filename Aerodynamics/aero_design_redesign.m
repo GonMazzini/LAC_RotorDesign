@@ -122,6 +122,20 @@ xlabel('r [m]');ylabel('t [m]')
 legend('Redesigned','DTU 10 MW RWT')
 grid on; box on;
 
+%% Generate geometry file
+
+%Uncomment to generate file with radius, chord, thickness, twist and t/c.
+
+% R  = rotor.r_lst';
+% c = rotor.c;
+% t = rotor.t;
+% beta = rotor.beta;
+% tc = 100*rotor.t./rotor.c;
+% 
+% T = table(R, c, t, beta, tc, 'VariableNames', { 'R', 'c', 't', 'beta', 'tc'});
+% 
+% writetable(T, 'redesign_geometry.txt')
+
 
 %% F U N C T I O N S
 
