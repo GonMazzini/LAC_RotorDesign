@@ -43,6 +43,9 @@ while dif>1e-6
 end
 %% 
 R2 = 0.95*R2;  % 
+
+% (11.4^3*89.15^2/(0.95*R2)^2)^(1/3)
+
 %% Airfoil selection
 
 % loading airfoil data

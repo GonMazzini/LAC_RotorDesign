@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['..\\..\\..\\Desktop\\LAC\\classes & other\\Control\\HAWC_control\\make_turb.py', '..\\..\\..\\Desktop\\LAC\\classes & other\\Control\\HAWC_control\\_run_hawc2_utils.py', 'Loads\\plot_steady.py', 'Loads\\calculate_fatigue_loads.py']
+recent_files = ['Structures\\scale.py', 'Structures\\st_original_flexible.dat', 'Aerodynamics\\aero_design_redesign.m', 'plot_pwr.py']
 

@@ -18,7 +18,7 @@ path1 = 'HAWC_inputs/DTU_10MW_final_ASIER_flexible_hawc2s';%'HAWC_inputs/DTU_10M
 % path2 = 'HAWC_inputs/DTU_10MW_redesign_rigid_hawc2s'; % rigid to correct deflections 
 
 %Operational file path:
-operational_file ='HAWC_inputs/data/operation_final.dat';% 'HAWC_inputs/DTU_10MW_final_flexible_hawc2s.opt';%'HAWC_inputs/data/operational_finalTSR';%data/operation_mult_WS_final'; % 
+operational_file ='HAWC_inputs/data/operation_final.opt';% 'HAWC_inputs/DTU_10MW_final_flexible_hawc2s.opt';%'HAWC_inputs/data/operational_finalTSR';%data/operation_mult_WS_final'; % 
 %operational_file = 'HAWC_inputs/data/operation_7pt.dat';
 R = 97.77*0.95; %Rotor radius
 
@@ -30,8 +30,7 @@ omega = data(:,3)*pi/30;
 pitch = data(:,2);
 TSR = round(omega*R./round(WSP,1),2);
     
-%% P, T, CP, CT vs TSR  
-% Esta se puede correr con el input OPT.file 
+%% P, T, CP, CT vs TSR
 
 data = readtable(append(path1,'.pwr'), 'Filetype', 'text');
 data = table2array(data);
@@ -62,7 +61,6 @@ xlabel('TSR [-]')
 grid on
 
 %% Cl, alpha Cl/Cd vs t/c (design and actual)
-% 
 
 load('Aerodynamics/polynomialsfinal.mat');
 

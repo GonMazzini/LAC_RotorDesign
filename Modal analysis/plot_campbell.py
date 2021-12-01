@@ -10,10 +10,10 @@ from pathlib import Path
 cwd = os.getcwd()
 cwd = cwd.replace('\\','/')
 path = Path(cwd).parent
-path = Path(str(path) + '\HAWC_inputs\data\DTU_10MW_redesign_flexible_hawc2s.opt')
+path = Path(str(path) + '\HAWC_inputs\DTU_10MW_final_ASIER_flexible_hawc2s.opt') # DTU_10MW_redesign_flexible_hawc2s
 
-struc_path = 'structural.cmb'  # either None or path to structural .cmb file
-aero_path = 'aeroelastic.cmb'  # either None or path to aeroelastic .cmb file
+struc_path =  'CAMPBELL_AERO_V1.cmb' #'structural.cmb'  # either None or path to structural .cmb file
+aero_path = 'CAMPBELL_STRUC_V1.cmb' # 'aeroelastic.cmb'  # either None or path to aeroelastic .cmb file
 min_wsp = 4  # minimum wind speed to plot
 max_modes = 12  # maximum number of modes to plot
 opt_path = path  # opt path for 1P, 3P, 6P lines

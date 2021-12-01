@@ -16,12 +16,12 @@ cwd = cwd.replace('\\','/')
 path = Path(cwd).parent
 
 # Output file name
-f_new_st = Path(str(path) + '\HAWC_inputs\data\DTU_10MW_RWT_Blade_redesign_st.dat')
+f_new_st = Path(str(path) + '\HAWC_inputs\data/final_st.dat')
 
 # ============================================================================
 # INPUTS
 # ============================================================================
-f_original_st = 'st_original.dat'
+f_original_st = 'st_original_flexible.dat'
 f_original_c2 = 'c2_original.dat'
 f_new_c2 = 'c2_new.dat'
 #

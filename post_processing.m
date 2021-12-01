@@ -14,7 +14,7 @@ set(0,'DefaultFigureWindowStyle','docked')
 %% Folder and file settings
 
 %File names
-path1 = 'HAWC_inputs/DTU_10MW_final_ASIER_flexible_hawc2s'; %Main file 
+path1 = 'HAWC_inputs/DTU_10MW_final_ASIER_flexible_hawc2s'; % Main file 
 path2 = 'HAWC_inputs/DTU_10MW_final_ASIER_flexible_hawc2s'; % rigid to correct deflections 
 
 %Operational file path:
