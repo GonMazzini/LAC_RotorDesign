@@ -4,7 +4,7 @@ Plots the loads flowers
 import numpy as np
 import matplotlib.pyplot as plt
 
-
+####################################### INPUTS#####################################
 design_loads_original = np.array([
     [3.706034e+05, 1.101813e+05, 5.244604e+04, #Extreme loads
     2.423309e+04, -2.305209e+04, -6.270792e+04,
@@ -22,6 +22,11 @@ design_loads_redesigned = np.array([
     1.508731e+03, 1.028497e+03, 1.784370e+04,
     2.101190e+04]
 ])
+
+AEP = np.array([32919, 35553.8]) #[original 10MW, redesigned 10MW] MWh
+
+######################################################################################33
+
 comparison_extrem = np.divide(design_loads_redesigned[0], design_loads_original[0])
 comparison_fatigue = np.divide(design_loads_redesigned[1],design_loads_original[1])
 
@@ -42,7 +47,7 @@ plt.figure(figsize=(10, 6))
 plt.subplot(polar=True)
 theta = np.linspace(0, 2 * np.pi, len(comparison_extrem)+1)
 comparison_extrem = np.append(comparison_extrem,comparison_extrem[0])
-# Arrange the grid into number of sales equal parts in degrees
+# Arrange the grid into equal parts in degrees
 lines, labels = plt.thetagrids(range(0, 360, int(360/len(ylabels))), (ylabels)) 
 # Plot actual sales graph
 plt.plot(theta, comparison_extrem ,'r',marker = 'D')
@@ -60,7 +65,7 @@ theta = np.linspace(0, 2 * np.pi, len(comparison_fatigue)+1)
 comparison_fatigue = np.append(comparison_fatigue,comparison_fatigue[0])
 
 theta = np.linspace(0, 2 * np.pi, len(comparison_fatigue))
-# Arrange the grid into number of sales equal parts in degrees
+# Arrange the grid into equal parts in degrees
 lines, labels = plt.thetagrids(range(0, 360, int(360/(len(ylabels)-1.2))), (ylabels[0:-1]))
 # Plot actual sales graph
 plt.plot(theta, comparison_fatigue ,'r',marker = 'D')
@@ -70,4 +75,13 @@ plt.plot(rads, r, '--b')
 plt.title("Fatigue loads",fontsize = 15)
 plt.tight_layout()
 
+
+## AEP comparison
+fig = plt.figure()
+ax = fig.add_axes([0,0,1,1])
+ax.set_title("IIB AEP")
+turbine = ['Original 10MW [MWh]', "Redesigned 10MW [MWh]"]
+AEP= [AEP[0],AEP[1]]
+ax.bar(turbine,AEP, color = ["blue", "orange"] )
+plt.show()
 
