@@ -14,11 +14,11 @@ set(0,'DefaultFigureWindowStyle','docked')
 %% Folder and file settings
 
 %File names
-path1 = 'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s'; %Main file 
-path2 = 'HAWC_inputs/DTU_10MW_redesign_rigid_hawc2s'; % rigid to correct deflections 
+path1 = 'HAWC_inputs/DTU_10MW_final_ASIER_flexible_hawc2s'; %Main file 
+path2 = 'HAWC_inputs/DTU_10MW_final_ASIER_flexible_hawc2s'; % rigid to correct deflections 
 
 %Operational file path:
-operational_file = 'HAWC_inputs/data/DTU_10MW_redesign_flexible_hawc2s.opt';
+operational_file = 'HAWC_inputs/data/operation_final.opt';
 %operational_file = 'HAWC_inputs/data/operation_7pt.dat';
 R = 97.77; %Rotor radius
 

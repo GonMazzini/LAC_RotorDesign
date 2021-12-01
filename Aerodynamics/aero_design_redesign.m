@@ -1,5 +1,8 @@
 clear all; close all; clc
 
+% This code outputs a struct with the optimized design minimizing the
+% residuals
+
 load('polynomials.mat');
 [dir,~,~]=fileparts(pwd);
 load(append(dir, '\blade_original\bladedat.txt'));
@@ -9,8 +12,8 @@ olddesign.c = bladedat(:,3);
 olddesign.tc = bladedat(:,4);clear bladedat
 olddesign.t = olddesign.tc.*olddesign.c/100;
 
-rotor.R = 97.7; % 97.7
-rotor.tsr = 6.75; % 6.75
+rotor.R = 92.8831; % 97.7
+rotor.tsr = 7.25; % 6.75
 rotor.B = 3;
 rotor.a = 1/3;
 
@@ -34,7 +37,7 @@ rotor.c(1:5)
 
 rotor.CP = trapz(rotor.r_lst, rotor.cp.*rotor.r_lst')*2/rotor.R^2;
 rotor.CT = trapz(rotor.r_lst, rotor.ct.*rotor.r_lst')*2/rotor.R^2;
-%%
+%% 
 
 figure
 plot(rotor.r_lst, rotor.c)
@@ -51,24 +54,26 @@ ylabel('$C_p$')
 grid on
 
 for i=1:length(rotor.beta)
+    % this is limitng twist
     if rotor.beta(i)>25
         rotor.beta(i) = 25;
     end
     tcratio = rotor.t(i)/rotor.c(i)*100;
+    % limiting to the thickes airfoil
     if tcratio < 24.1
         tcratio = 24.1;
         rotor.c(i) = rotor.t(i)/(tcratio/100); 
     end
-
+    
     
     a = olddesign.r(1:6);
     b = olddesign.c(1:6);
-    b(5) = b(5)*1.02;
-    b(6) = b(6)*1.03;
-
-    if rotor.r_lst(i)<43 && rotor.r_lst(i)>9.2
+    b(5) = b(5)*1.02;  %1.02
+    b(6) = b(6)*1.03;  %1.03
+    
+    if rotor.r_lst(i)<32 && rotor.r_lst(i)>9.2
     rotor.c(i,1) = spline(a, b , rotor.r_lst(i))*rotor.R/olddesign.r(end);
-    elseif rotor.r_lst(i)<10
+    elseif rotor.r_lst(i)<10 % linear interp
         rotor.c(i,1) = interp1([rotor.r_lst(1), 10],...
                               [olddesign.c(1), spline(a, b , 10)*rotor.R/olddesign.r(end)], rotor.r_lst(i));
     end 
@@ -85,7 +90,7 @@ rotor.beta(end+1) = rotor.beta(end);
 rotor.t(end+1) = rotor.t(end)*0.55;
 rotor.c(end+1) = rotor.c(end)*0.55;
 
-
+rotor.c(1:end/2) = smooth(rotor.c(1:end/2));
 
 %% Comparison of designs
 
@@ -121,6 +126,14 @@ title('Absolute thickness distribution')
 xlabel('r [m]');ylabel('t [m]')
 legend('Redesigned','DTU 10 MW RWT')
 grid on; box on;
+
+
+%%
+%%
+disp(rotor.tsr)
+disp(rotor.CP)
+disp(rotor.CT)
+disp("------")
 
 
 %% F U N C T I O N S
@@ -252,3 +265,5 @@ function clcd = clcd_des(tcratio,polynomials)
         print('Invalid t/c range')
     end
 end
+
+

@@ -73,4 +73,4 @@ last = repmat(';',[27,1]);
 %Table creation
 T = table(sec, x_pos, y_pos, z_pos, twist, last);
 [dir,~,~]=fileparts(pwd);
-writetable(T,append(dir,'\HAWC_inputs/blade_coords_htc.txt'), 'Delimiter', ' ', 'QuoteStrings', false );
+writetable(T,append(dir,'\HAWC_inputs\blade_coords_htc_Final.txt'), 'Delimiter', ' ', 'QuoteStrings', false );

@@ -2,6 +2,7 @@
 % Group 0
 % Aerodynamic redesign of DTU 10MW
 %% Content of this script:  
+% !!!!Run main.m before using aero_design_redesign!!!!
 % - tip radius scaling (line 16 until 37)
 % - read airfoil data and plot polars for 4 FFA-XXX airfoils (line 39 until 105)
 % - set the shifts and calc design AoA for max(Cl)-shift
@@ -17,7 +18,7 @@ set(groot, 'defaultLegendInterpreter','latex');
 set(0,'defaultAxesFontSize',12);
 set(0, 'DefaultLineLineWidth', 1);
 set(0, 'DefaultFigureRenderer', 'painters');
-set(0,'DefaultFigureWindowStyle','docked') % docked
+set(0,'DefaultFigureWindowStyle','normal') % docked
 %% Tip radius scaling
 
 R1 = 178.3/2; % original radius
@@ -32,7 +33,7 @@ dif = 1e12;
 it = 0;
 while dif>1e-6
     
-    V2 = (V1^3*R1^2/R2_guess^2)^(1/3); % new rated wind speeed
+    V2 = (V1^3*R1^2/R2_guess^2)^(1/3); % new rated wind speeed % Power
     V2_max = V2*(1+2*I2); % new maximum wind speed
 
     R2 = R1*V1_max/V2_max; % corrected radius
@@ -40,7 +41,8 @@ while dif>1e-6
     R2_guess = R2; % update radius
     it = it + 1;
 end
-
+%% 
+R2 = 0.95*R2;  % 
 %% Airfoil selection
 
 % loading airfoil data
@@ -180,7 +182,7 @@ ylabel('Design $C_l/C_d$')
 
 %% Thickness scaling
 
-data = readtable('blade_original/DTU_10MW_RWT_ae', 'Filetype', 'text');
+data = readtable('../blade_original/DTU_10MW_RWT_ae', 'Filetype', 'text');
 data = table2array(data(:,1:4));
 
 t_dtu = data(:,3).*data(:,2)/100;

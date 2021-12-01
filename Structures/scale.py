@@ -57,7 +57,7 @@ list_1 = [col_name[i] for i in s_f_1]
 list_2 = [col_name[i] for i in s_f_2]
 list_4 = [col_name[i] for i in s_f_4]
 #
-s_r = (97.77-2.8)/(178.3/2-2.8)
+s_r = (97.77*0.95-2.8)/(178.3/2-2.8)
 #
 for i in s_f_0:
     st_new[:,i] = st_original[:,i] * s_r ** 0.0
