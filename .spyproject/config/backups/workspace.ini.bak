@@ -6,5 +6,5 @@ save_non_project_files = False
 
 [main]
 version = 0.2.0
-recent_files = ['Structures\\scale.py', 'Structures\\st_original_flexible.dat', 'Aerodynamics\\aero_design_redesign.m', 'plot_pwr.py']
+recent_files = ['Structures\\st_original_flexible.dat', 'Structures\\scale.py', 'Modal analysis\\plot_campbell.py', 'plot_pwr.py', 'plot_pwr_numpy.py']
 

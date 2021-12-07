@@ -27,7 +27,7 @@ T = table(radial, chord, t_c, rigid);
 T.semicolon = [cell(1,1); cell(1,1) ;strrep(num2cell( num2str(ones(size(RforDAT))) ), '1', ';')];
 
 [dir,~,~]=fileparts(pwd);
-writetable(T,append(dir,'\HAWC_inputs\data\DTU_10MW_RWT_final2_ae.dat'),'Delimiter','\t', 'WriteVariableNames', false);
+writetable(T,append(dir,'\HAWC_inputs\data\DTU_10MW_RWT_final3_ae.dat'),'Delimiter','\t', 'WriteVariableNames', false);
 % type HAWC_inputs\data\DTU_10MW_RWT_final_ae.dat
 
 %warning('Remember to add the number of lines in the _ae file');

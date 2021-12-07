@@ -11,11 +11,11 @@ import pandas as pd
 
 #%% For varying wsp
 
-f1 = './HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s.pwr'
-f2 = './HAWC_inputs/DTU_10MW_final_ASIER_flexible_hawc2s.pwr'
+f1 = 'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s.pwr'    #'.\\HAWC_inputs\\DTU_10MW_redesign_flexible_hawc2s.pwr'
+f2 = 'HAWC_inputs/final_design_v1_run0.pwr'
 
 paths =  [f1, f2]
-leg_names = ['DTU 10MW', 'Redesign 1']
+leg_names = ['DTU 10MW', 'Redesign Final']
 col_names = ['V', 'P', 'T', 'CP', 'CT', 'Q', 'Flap M', 'Edge M',\
              'pitch', 'speed', 'tip x', 'typ y', 'tip z', 'J_rot', 'J_dt']
 ylab = ['V', 'P [kW]', 'T [kN]', '$C_P$ [-]', '$C_T$ [-]', 'Q', 'Flap M', 'Edge M',\
@@ -39,9 +39,9 @@ for i in range(len(idx_plot)):
 
 #%% For varying tsr
 
-path = './V2/results/steady/tsr/V2_hs2.pwr'
+path = 'HAWC_inputs/final_design_v1_run0.pwr'
 
-R = 95.32742340218736
+R = 92.8831 #  95.32742340218736
 
 leg_names = ['DTU 10MW', 'Redesign 1']
 col_names = ['V', 'P', 'T', 'CP', 'CT', 'Q', 'Flap M', 'Edge M',\

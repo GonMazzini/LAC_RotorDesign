@@ -41,8 +41,9 @@ while dif>1e-6
     R2_guess = R2; % update radius
     it = it + 1;
 end
-%% 
+%% Downsacle 5%
 R2 = 0.95*R2;  % 
+
 
 % (11.4^3*89.15^2/(0.95*R2)^2)^(1/3)
 

@@ -13,14 +13,14 @@ set(0,'DefaultFigureWindowStyle','docked')
 
 %% Folder and file settings
 
-%File names
-path1 = 'HAWC_inputs/DTU_10MW_final_ASIER_flexible_hawc2s';%'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s'; %Main file 
+%File names (.pwr)
+path1 = 'HAWC_inputs/final_design_v3_run0';%'HAWC_inputs/DTU_10MW_redesign_flexible_hawc2s'; %Main file 
 % path2 = 'HAWC_inputs/DTU_10MW_redesign_rigid_hawc2s'; % rigid to correct deflections 
 
 %Operational file path:
-operational_file ='HAWC_inputs/data/operation_final.dat';% 'HAWC_inputs/DTU_10MW_final_flexible_hawc2s.opt';%'HAWC_inputs/data/operational_finalTSR';%data/operation_mult_WS_final'; % 
+operational_file ='HAWC_inputs/data/operation_final_v3.dat';% 'HAWC_inputs/DTU_10MW_final_flexible_hawc2s.opt';%'HAWC_inputs/data/operational_finalTSR';%data/operation_mult_WS_final'; % 
 %operational_file = 'HAWC_inputs/data/operation_7pt.dat';
-R = 97.77*0.95; %Rotor radius
+R = 97.77 ; % *0.95; %Rotor radius
 
 %Making operational vectors
 data = readtable(operational_file, 'Filetype', 'text');
@@ -31,7 +31,8 @@ pitch = data(:,2);
 TSR = round(omega*R./round(WSP,1),2);
     
 %% P, T, CP, CT vs TSR  
-% Esta se puede correr con el input OPT.file 
+% Esta se puede correr con el input OPT.file (ws constant). Genera 1 solo
+% Grafico
 
 data = readtable(append(path1,'.pwr'), 'Filetype', 'text');
 data = table2array(data);
@@ -61,19 +62,18 @@ ylabel('$C_T$ [-]')
 xlabel('TSR [-]')
 grid on
 
-%% Cl, alpha Cl/Cd vs t/c (design and actual)
-% 
+%% Cl, alpha Cl/Cd vs t/c (design and actual) 
 
-load('Aerodynamics/polynomialsfinal.mat');
+load('Aerodynamics/polynomials.mat');
 
 name = {'$\alpha$ [deg]' '$C_l$ [-]', '$C_l/C_d$ [-]'};
 pos = [5, 17, 18];
-desired_TSR = 7.5; %Choose desired TSR value
+desired_TSR = 8.5; %Choose desired TSR value
 
 [tc, alpha, cl, clcd] = deal(zeros(length(data(:,1)), 1));
 
-[~, idx] = min(abs(TSR - TSRs(j)));
-filename = append('HAWC_inputs/DTU_10MW_final_flexible_hawc2s','_u',erase(num2str(WSP(idx)),'.'),'.ind');
+[~, idx] = min(abs(TSR - desired_TSR));
+filename = append('HAWC_inputs/final_design_v3_run0','_u',erase(num2str(WSP(idx)),'.'),'.ind');
 data = readtable(filename,'Filetype', 'text');
 data = table2array(data);
 r = data(:,1);
@@ -98,11 +98,8 @@ end
 for i=1:length(pos)
     figure;
     subplot(2,1,1)
-    
 %     tc = zeros(length(data(:,1)),1);
-    
-
-   
+ 
     if pos(i) == 5 % alpha
         plot(tc, rad2deg(data(:,pos(i))), 'DisplayName', 'actual');
         ylabel(name(i));
@@ -153,7 +150,7 @@ end
 
 name = {'a [-]', 'a''[-]', '$\alpha$ [deg]' '$C_l$ [-]', '$C_l/C_d$ [-]', '$C_P$ [-]', '$C_T$ [-]'};
 pos = [2, 3, 5, 17, 18, 34, 33];
-TSRs = [6.75:0.25:8]; %Choose desired TSR values (set equal to TSR for all)
+TSRs = [6.75:0.25:8]; % Choose desired TSR values (set equal to TSR for all)
 for i=1:length(pos)
     figure;
     for j=1:length(TSRs)
